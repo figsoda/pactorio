@@ -162,10 +162,11 @@ pub fn app() -> Fallible<()> {
     fs::write(output.join("info.json"), if args.is_present("compact") {
         serde_json::to_string(&info)?
     } else {
+        let mut writer = Vec::with_capacity(256);
         let pretty = serde_json::ser::PrettyFormatter::with_indent(b"    ");
-        let mut ser = serde_json::Serializer::with_formatter(Vec::new(), pretty);
+        let mut ser = serde_json::Serializer::with_formatter(&mut writer, pretty);
         info.serialize(&mut ser)?;
-        String::from_utf8(ser.into_inner())?
+        String::from_utf8(writer)?
     })?;
 
     Ok(())
