@@ -1,86 +1,84 @@
-use serde::{ Deserialize, Serialize };
+use serde::{Deserialize, Serialize};
 
-use std::{
-    collections::HashMap,
-    default::Default,
-    option::Option,
-};
+use std::{collections::HashMap, default::Default, option::Option};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Deps {
     #[serde(default)]
-    required : HashMap<String, String>,
+    required: HashMap<String, String>,
     #[serde(alias = "incompatible")]
     #[serde(default)]
-    conflict : HashMap<String, String>,
+    conflict: HashMap<String, String>,
     #[serde(default)]
-    optional : HashMap<String, String>,
+    optional: HashMap<String, String>,
     #[serde(default)]
-    hidden : HashMap<String, String>,
+    hidden: HashMap<String, String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Package {
-    pub name : String,
-    pub version : String,
-    pub title : String,
-    pub author : String,
-    pub contact : Option<String>,
-    pub homepage : Option<String>,
-    pub description : Option<String>,
-    pub factorio_version : Option<String>,
+    pub name: String,
+    pub version: String,
+    pub title: String,
+    pub author: String,
+    pub contact: Option<String>,
+    pub homepage: Option<String>,
+    pub description: Option<String>,
+    pub factorio_version: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Source {
     #[serde(alias = "directory")]
-    pub dir : String,
+    pub dir: String,
 }
 
 impl Default for Source {
     fn default() -> Source {
-        Source { dir : String::from("src") }
+        Source {
+            dir: String::from("src"),
+        }
     }
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Config {
-    pub package : Package,
+    pub package: Package,
     #[serde(alias = "dependencies")]
-    pub deps : Option<Deps>,
+    pub deps: Option<Deps>,
     #[serde(default)]
-    pub source : Source,
+    pub source: Source,
 }
 
 #[derive(Clone, Debug, Serialize)]
 pub struct Info {
-    pub name : String,
-    pub version : String,
-    pub title : String,
-    pub author : String,
+    pub name: String,
+    pub version: String,
+    pub title: String,
+    pub author: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact : Option<String>,
+    pub contact: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub homepage : Option<String>,
+    pub homepage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub description : Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub factorio_version : Option<String>,
+    pub factorio_version: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dependencies : Option<Vec<String>>
+    pub dependencies: Option<Vec<String>>,
 }
 
-pub fn get_info(cfg : Config) -> Info {
+pub fn get_info(cfg: Config) -> Info {
     Info {
-        name : cfg.package.name.clone(),
-        version : cfg.package.version.clone(),
-        title : cfg.package.title.clone(),
-        author : cfg.package.author.clone(),
-        contact : cfg.package.contact.clone(),
-        homepage : cfg.package.homepage.clone(),
-        description : cfg.package.description.clone(),
-        factorio_version : cfg.package.factorio_version.clone(),
-        dependencies : cfg.deps.map(|deps|{
+        name: cfg.package.name.clone(),
+        version: cfg.package.version.clone(),
+        title: cfg.package.title.clone(),
+        author: cfg.package.author.clone(),
+        contact: cfg.package.contact.clone(),
+        homepage: cfg.package.homepage.clone(),
+        description: cfg.package.description.clone(),
+        factorio_version: cfg.package.factorio_version.clone(),
+        dependencies: cfg.deps.map(|deps| {
             let mut xs = Vec::new();
 
             for (name, version) in deps.required {

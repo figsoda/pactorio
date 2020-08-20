@@ -1,12 +1,12 @@
 mod util;
-use util::{ Config, get_info };
+use util::{get_info, Config};
 
 use clap::clap_app;
 use failure::Fallible;
 use serde::Serialize;
 use walkdir::WalkDir;
 
-use std::{ fs, path::Path };
+use std::{fs, path::Path};
 
 fn app() -> Fallible<()> {
     let args = clap_app!(pactorio =>
@@ -16,11 +16,12 @@ fn app() -> Fallible<()> {
         (@arg compact : -c --compact "Output info.json compactly")
         (@arg input : -i --input [CONFIG_FILE] "Specify the config file to use")
         (@arg output : -o --output [OUTPUT_DIRECTORY] "Specify the output directory")
-    ).get_matches();
+    )
+    .get_matches();
 
-    let cfg : Config = toml::from_str(
-        &fs::read_to_string(args.value_of("input").unwrap_or("pactorio.toml"))?,
-    )?;
+    let cfg: Config = toml::from_str(&fs::read_to_string(
+        args.value_of("input").unwrap_or("pactorio.toml"),
+    )?)?;
 
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
@@ -34,14 +35,14 @@ fn app() -> Fallible<()> {
         name.push_str(&cfg.package.version);
         name
     });
-    
+
     if output.is_dir() {
         fs::remove_dir_all(&output)?;
     } else if output.is_file() {
         fs::remove_file(&output)?;
     }
     fs::create_dir_all(&output)?;
-    
+
     for from in files {
         if let Ok(to) = from.strip_prefix(&cfg.source.dir) {
             let to = output.join(to);
@@ -52,23 +53,24 @@ fn app() -> Fallible<()> {
             }
         }
     }
-    
+
     let info = get_info(cfg);
-    fs::write(output.join("info.json"), if args.is_present("compact") {
-        serde_json::to_string(&info)?
-    } else {
-        let mut writer = Vec::with_capacity(256);
-        let pretty = serde_json::ser::PrettyFormatter::with_indent(b"    ");
-        let mut ser = serde_json::Serializer::with_formatter(&mut writer, pretty);
-        info.serialize(&mut ser)?;
-        String::from_utf8(writer)?
-    })?;
+    fs::write(
+        output.join("info.json"),
+        if args.is_present("compact") {
+            serde_json::to_string(&info)?
+        } else {
+            let mut writer = Vec::with_capacity(256);
+            let pretty = serde_json::ser::PrettyFormatter::with_indent(b"    ");
+            let mut ser = serde_json::Serializer::with_formatter(&mut writer, pretty);
+            info.serialize(&mut ser)?;
+            String::from_utf8(writer)?
+        },
+    )?;
 
     Ok(())
 }
 
 fn main() {
-    let _ = app().map_err(|e|
-        println!("{}", e)
-    );
+    let _ = app().map_err(|e| println!("{}", e));
 }
