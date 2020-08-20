@@ -1,16 +1,16 @@
 [package]
 name = "pactorio"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["figsoda"]
 edition = "2018"
 
 [dependencies]
-clap = "2.33.0"
-failure = "0.1.6"
-serde_json = "1.0.44"
-toml = "0.5.5"
-walkdir = "2.2.9"
+failure = "0.1.8"
+serde_json = "1.0.57"
+structopt = "0.3.16"
+toml = "0.5.6"
+walkdir = "2.3.1"
 
 [dependencies.serde]
-version = "1.0.104"
+version = "1.0.115"
 features = ["derive"]
