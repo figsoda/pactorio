@@ -1,7 +1,7 @@
 mod types;
 use types::{Config, Info};
 
-use failure::Fallible;
+use anyhow::Result;
 use serde::Serialize;
 use structopt::StructOpt;
 use walkdir::WalkDir;
@@ -25,7 +25,7 @@ struct Opt {
     output: String,
 }
 
-fn main() -> Fallible<()> {
+fn main() -> Result<()> {
     let opt = Opt::from_args();
 
     let cfg: Config = toml::from_str(&fs::read_to_string(opt.input)?)?;
