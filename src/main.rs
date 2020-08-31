@@ -1,7 +1,7 @@
 mod types;
 use types::{Config, Info};
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use serde::Serialize;
 use structopt::StructOpt;
 use walkdir::WalkDir;
@@ -28,11 +28,23 @@ struct Opt {
 fn main() -> Result<()> {
     let opt = Opt::from_args();
 
-    let cfg: Config = toml::from_str(&fs::read_to_string(opt.input)?)?;
+    let cfg: Config = toml::from_str(
+        &fs::read_to_string(&opt.input)
+            .context(format!("Failed to read the config file {}", opt.input))?,
+    )
+    .context(format!("Failed to parse the config file {}", opt.input))?;
 
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
-        files.push(entry?.path().to_owned());
+        files.push(
+            entry
+                .context(format!(
+                    "Failed when traversing the source directory {}",
+                    cfg.source.dir,
+                ))?
+                .path()
+                .to_owned(),
+        );
     }
 
     let output = Path::new(&opt.output).join({
@@ -44,19 +56,26 @@ fn main() -> Result<()> {
     });
 
     if output.is_dir() {
-        fs::remove_dir_all(&output)?;
+        fs::remove_dir_all(&output)
+            .context(format!("Failed to remove directory {}", output.display()))?;
     } else if output.is_file() {
-        fs::remove_file(&output)?;
+        fs::remove_file(&output).context(format!("Failed to remove file {}", output.display()))?;
     }
-    fs::create_dir_all(&output)?;
+    fs::create_dir_all(&output)
+        .context(format!("Failed to create directory {}", output.display()))?;
 
     for from in files {
         if let Ok(to) = from.strip_prefix(&cfg.source.dir) {
             let to = output.join(to);
             if from.is_dir() {
-                fs::create_dir(to)?;
+                fs::create_dir(to)
+                    .context(format!("Failed to create directory {}", output.display()))?;
             } else if from.is_file() {
-                fs::copy(from, to)?;
+                fs::copy(&from, &to).context(format!(
+                    "Failed to copy from {} to {}",
+                    from.display(),
+                    to.display(),
+                ))?;
             }
         }
     }
@@ -65,16 +84,18 @@ fn main() -> Result<()> {
     fs::write(
         output.join("info.json"),
         if opt.compact {
-            serde_json::to_string(&info)?
+            serde_json::to_string(&info).context("Failed to generate info.json")?
         } else {
             let mut writer = Vec::with_capacity(256);
             info.serialize(&mut serde_json::Serializer::with_formatter(
                 &mut writer,
                 serde_json::ser::PrettyFormatter::with_indent(b"    "),
-            ))?;
-            String::from_utf8(writer)?
+            ))
+            .context("Failed to generate info.json")?;
+            String::from_utf8(writer).context("Failed to generate info.json")?
         },
-    )?;
+    )
+    .context("Failed to create file info.json")?;
 
     Ok(())
 }
