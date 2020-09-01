@@ -4,6 +4,7 @@ version = "0.2.2"
 authors = ["figsoda"]
 edition = "2018"
 license = "MPL-2.0"
+description = "Pactorio is a tool that packs factorio mods that uses toml instead of json for config files. "
 homepage = "https://github.com/figsoda/pactorio"
 repository = "https://github.com/figsoda/pactorio"
 readme = "README.md"
