@@ -8,7 +8,7 @@ use walkdir::WalkDir;
 
 use std::{fs, path::Path};
 
-/// Factorio mod packer
+/// Factorio mod packager https://github.com/figsoda/pactorio
 #[derive(StructOpt)]
 #[structopt(name = "pactorio")]
 struct Opt {
