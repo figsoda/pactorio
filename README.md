@@ -1,11 +1,15 @@
 # Pactorio
 Pactorio is a tool that packages factorio mods and uses toml for config files. 
 
-## Install
-`cargo install pactorio`
+## Installing with cargo
+```
+cargo install pactorio
+```
 
-## Build
-`cargo build --release`
+## Building from source
+```
+cargo build --release
+```
 
 ## Usage
     pactorio [FLAGS] [OPTIONS]
