@@ -47,13 +47,8 @@ fn main() -> Result<()> {
         );
     }
 
-    let output = Path::new(&opt.output).join({
-        let mut name = String::new();
-        name.push_str(&cfg.package.name);
-        name.push('_');
-        name.push_str(&cfg.package.version);
-        name
-    });
+    let output =
+        Path::new(&opt.output).join(format!("{}_{}", cfg.package.name, cfg.package.version));
 
     if output.is_dir() {
         fs::remove_dir_all(&output)
