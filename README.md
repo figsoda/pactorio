@@ -1,4 +1,12 @@
 # Pactorio
+
+[![version](https://img.shields.io/crates/v/pactorio.svg?style=flat-square)][Crate]
+[![downloads](https://img.shields.io/crates/d/pactorio.svg?style=flat-square)][Crate]
+![license](https://img.shields.io/crates/l/pactorio.svg?style=flat-square)
+![top language](https://img.shields.io/github/languages/top/figsoda/pactorio.svg?style=flat-square)
+
+[Crate]: https://crates.io/crates/pactorio
+
 Pactorio is a tool that packages factorio mods and uses toml for config files. 
 
 ## Installing with cargo
@@ -22,3 +30,6 @@ cargo build --release
 ### OPTIONS
     -i, --input <input>      Specify the config file to use [default: pactorio.toml]
     -o, --output <output>    Specify the output directory [default: release]
+
+## Changelog
+See [CHANGELOG.md](https://github.com/figsoda/pactorio/blob/master/CHANGELOG.md)
