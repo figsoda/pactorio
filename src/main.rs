@@ -63,8 +63,8 @@ fn main() -> Result<()> {
         if let Ok(to) = from.strip_prefix(&cfg.source.dir) {
             let to = output.join(to);
             if from.is_dir() {
-                fs::create_dir(to)
-                    .context(format!("Failed to create directory {}", output.display()))?;
+                fs::create_dir(&to)
+                    .context(format!("Failed to create directory {}", to.display()))?;
             } else if from.is_file() {
                 fs::copy(&from, &to).context(format!(
                     "Failed to copy from {} to {}",
