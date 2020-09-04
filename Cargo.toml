@@ -1,6 +1,6 @@
 [package]
 name = "pactorio"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["figsoda"]
 edition = "2018"
 license = "MPL-2.0"
