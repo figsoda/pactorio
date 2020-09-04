@@ -26,6 +26,7 @@ cargo build --release
     -c, --compact    Output info.json compactly
     -h, --help       Prints help information
     -V, --version    Prints version information
+    -z, --zip        Output a zip file instead
 
 ### OPTIONS
     -i, --input <input>      Specify the config file to use [default: pactorio.toml]
