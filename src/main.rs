@@ -1,15 +1,15 @@
+mod release;
 mod types;
-use types::{Config, Info};
+
+use crate::types::{Config, Info};
 
 use anyhow::{Context, Result};
 use serde::Serialize;
 use structopt::StructOpt;
 use walkdir::WalkDir;
-use zip::{write::FileOptions, CompressionMethod, ZipWriter};
 
 use std::{
     fs::{self, File},
-    io::{self, Write},
     path::Path,
 };
 
@@ -71,7 +71,7 @@ fn main() -> Result<()> {
 
     if opt.zip {
         fs::create_dir_all(&opt.output)
-            .context(format!("Failed to create directory {}", &opt.output))?;
+            .context(format!("Failed to create directory {}", opt.output))?;
         let output = Path::new(&opt.output)
             .join(format!("{}_{}.zip", cfg.package.name, cfg.package.version));
         if output.is_dir() {
@@ -81,35 +81,10 @@ fn main() -> Result<()> {
             fs::remove_file(&output)
                 .context(format!("Failed to remove file {}", output.display()))?;
         }
+        let file = File::create(&output)
+            .context(format!("Failed to create zip file {}", output.display()))?;
 
-        let mut zip = ZipWriter::new(
-            File::create(&output)
-                .context(format!("Failed to create zip file {}", output.display()))?,
-        );
-        let fo = FileOptions::default()
-            .compression_method(CompressionMethod::Stored)
-            .unix_permissions(0o755);
-
-        for from in files {
-            if let Ok(to) = from.strip_prefix(&cfg.source.dir) {
-                if from.is_dir() {
-                    zip.add_directory_from_path(to, Default::default())
-                        .context("Failed to write to the zip file")?;
-                } else if from.is_file() {
-                    let mut file = File::open(&from)
-                        .context(format!("Failed to read file {}", from.display()))?;
-                    zip.start_file_from_path(to, fo)
-                        .context("Failed to write to the zip file")?;
-                    io::copy(&mut file, &mut zip).context("Failed to write to the zip file")?;
-                }
-            }
-        }
-
-        zip.start_file("info.json", fo)
-            .context("Failed to write to the zip file")?;
-        zip.write_all(&info)
-            .context("Failed to write to the zip file")?;
-        zip.finish().context("Failed to write to the zip file")?;
+        release::zip(files, info, cfg, file)?;
     } else {
         let output =
             Path::new(&opt.output).join(format!("{}_{}", cfg.package.name, cfg.package.version));
@@ -123,23 +98,7 @@ fn main() -> Result<()> {
         fs::create_dir_all(&output)
             .context(format!("Failed to create directory {}", output.display()))?;
 
-        for from in files {
-            if let Ok(to) = from.strip_prefix(&cfg.source.dir) {
-                let to = output.join(to);
-                if from.is_dir() {
-                    fs::create_dir(&to)
-                        .context(format!("Failed to create directory {}", to.display()))?;
-                } else if from.is_file() {
-                    fs::copy(&from, &to).context(format!(
-                        "Failed to copy from {} to {}",
-                        from.display(),
-                        to.display(),
-                    ))?;
-                }
-            }
-        }
-
-        fs::write(output.join("info.json"), info).context("Failed to create file info.json")?;
+        release::folder(files, info, cfg, output)?;
     }
 
     Ok(())
