@@ -39,6 +39,8 @@ pub fn zip(
     root: PathBuf,
 ) -> Result<()> {
     let mut zip = ZipWriter::new(writer);
+    zip.set_comment("");
+
     let fo = FileOptions::default()
         .compression_method(CompressionMethod::Stored)
         .unix_permissions(0o755);
