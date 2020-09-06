@@ -10,7 +10,7 @@ use walkdir::WalkDir;
 
 use std::{
     fs::{self, File},
-    path::Path,
+    path::{Path, PathBuf},
 };
 
 /// Factorio mod packager https://github.com/figsoda/pactorio
@@ -69,11 +69,11 @@ fn main() -> Result<()> {
         writer
     };
 
+    let name = format!("{}_{}", cfg.package.name, cfg.package.version);
     if opt.zip {
         fs::create_dir_all(&opt.output)
             .context(format!("Failed to create directory {}", opt.output))?;
-        let output = Path::new(&opt.output)
-            .join(format!("{}_{}.zip", cfg.package.name, cfg.package.version));
+        let output = Path::new(&opt.output).join(format!("{}.zip", name));
         if output.is_dir() {
             fs::remove_dir_all(&output)
                 .context(format!("Failed to remove directory {}", output.display()))?;
@@ -84,10 +84,9 @@ fn main() -> Result<()> {
         let file = File::create(&output)
             .context(format!("Failed to create zip file {}", output.display()))?;
 
-        release::zip(files, info, cfg, file)?;
+        release::zip(files, info, cfg, file, PathBuf::from(name))?;
     } else {
-        let output =
-            Path::new(&opt.output).join(format!("{}_{}", cfg.package.name, cfg.package.version));
+        let output = Path::new(&opt.output).join(name);
         if output.is_dir() {
             fs::remove_dir_all(&output)
                 .context(format!("Failed to remove directory {}", output.display()))?;
