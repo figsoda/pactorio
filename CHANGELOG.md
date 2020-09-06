@@ -1,6 +1,12 @@
 # Changelog
 
 
+## 0.3.2 - 2020-09-06
+
+## Fixes
+- Now outputs the zip with the correct mod structure
+
+
 ## 0.3.1 - 2020-09-05
 
 ### Documentation
