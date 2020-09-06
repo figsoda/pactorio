@@ -1,15 +1,18 @@
+mod publish;
 mod release;
 mod types;
 
 use crate::types::{Config, Info};
 
 use anyhow::{Context, Result};
+use reqwest::Client;
 use serde::Serialize;
 use structopt::StructOpt;
 use walkdir::WalkDir;
 
 use std::{
     fs::{self, File},
+    io::Cursor,
     path::{Path, PathBuf},
 };
 
@@ -29,12 +32,17 @@ struct Opt {
     #[structopt(short, long, default_value = "release")]
     output: String,
 
+    /// Publish to mod portal
+    #[structopt(short, long)]
+    publish: bool,
+
     /// Output a zip file instead
     #[structopt(short, long)]
     zip: bool,
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let opt = Opt::from_args();
 
     let cfg: Config = toml::from_str(
@@ -69,11 +77,36 @@ fn main() -> Result<()> {
         writer
     };
 
-    let name = format!("{}_{}", cfg.package.name, cfg.package.version);
-    if opt.zip {
+    let file_name = format!("{}_{}", cfg.package.name, cfg.package.version);
+    if opt.publish {
+        let client = Client::builder()
+            .cookie_store(true)
+            .build()
+            .context("Failed to create http client")?;
+
+        let csrf_token = publish::get_csrf_token(&client)
+            .await
+            .context("Failed to fetch csrf token")?;
+
+        println!("Login to Factorio");
+        publish::login(&client, csrf_token)
+            .await
+            .context("Failed to login to Factorio")?;
+        println!("Processing...");
+
+        let upload_token = publish::get_upload_token(&client, &cfg.package.name)
+            .await
+            .context("Failed to fetch upload token")?;
+
+        let mut zip = Cursor::new(Vec::with_capacity(256));
+        release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
+        publish::update_mod(&client, cfg.package.name, upload_token, zip.into_inner())
+            .await
+            .context("Failed to update mod")?;
+    } else if opt.zip {
         fs::create_dir_all(&opt.output)
             .context(format!("Failed to create directory {}", opt.output))?;
-        let output = Path::new(&opt.output).join(format!("{}.zip", name));
+        let output = Path::new(&opt.output).join(format!("{}.zip", file_name));
         if output.is_dir() {
             fs::remove_dir_all(&output)
                 .context(format!("Failed to remove directory {}", output.display()))?;
@@ -84,9 +117,9 @@ fn main() -> Result<()> {
         let file = File::create(&output)
             .context(format!("Failed to create zip file {}", output.display()))?;
 
-        release::zip(files, info, cfg, file, PathBuf::from(name))?;
+        release::zip(files, info, cfg, file, PathBuf::from(file_name))?;
     } else {
-        let output = Path::new(&opt.output).join(name);
+        let output = Path::new(&opt.output).join(file_name);
         if output.is_dir() {
             fs::remove_dir_all(&output)
                 .context(format!("Failed to remove directory {}", output.display()))?;

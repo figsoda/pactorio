@@ -103,3 +103,14 @@ impl From<Config> for Info {
         }
     }
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UploadResult {
+    pub changelog: Option<String>,
+    pub filename: String,
+    #[serde(skip_deserializing)]
+    pub file_size: usize,
+    #[serde(rename(serialize = "info_json"))]
+    pub info: String,
+    pub thumbnail: Option<String>,
+}
