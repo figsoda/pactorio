@@ -1,9 +1,17 @@
 # Changelog
 
+## 0.4.0 - 2020-09-06
+
+### Changes
+- Output zip files no longer have comments
+
+### Features
+- Option to publish the mod to mod portal directly
+
 
 ## 0.3.2 - 2020-09-06
 
-## Fixes
+### Fixes
 - Now outputs the zip with the correct mod structure
 
 
