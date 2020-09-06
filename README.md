@@ -25,6 +25,7 @@ cargo build --release
 ### FLAGS
     -c, --compact    Output info.json compactly
     -h, --help       Prints help information
+    -p, --publish    Publish to mod portal
     -V, --version    Prints version information
     -z, --zip        Output a zip file instead
 
