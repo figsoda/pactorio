@@ -14,7 +14,7 @@ use std::fmt::Display;
 
 pub async fn check_mod(
     mod_name: impl Display,
-    mod_version: impl PartialEq<String>,
+    mod_version: &impl PartialEq<String>,
 ) -> Result<bool> {
     match reqwest::get(&format!("https://mods.factorio.com/api/mods/{}", mod_name))
         .await?
@@ -24,7 +24,7 @@ pub async fn check_mod(
         ModQuery::Err { message } => bail!(message),
         ModQuery::Mod { releases } => {
             for ModRelease { version } in releases {
-                if mod_version == version {
+                if mod_version == &version {
                     return Ok(true);
                 }
             }

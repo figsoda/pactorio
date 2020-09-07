@@ -82,7 +82,7 @@ async fn main() -> Result<()> {
         let mod_name = &cfg.package.name;
         let mod_version = &cfg.package.version;
 
-        if publish::check_mod(mod_name, mod_version.clone())
+        if publish::check_mod(mod_name, mod_version)
             .await
             .context(format!("Failed to query mod {}", mod_name))?
         {
