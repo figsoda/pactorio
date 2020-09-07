@@ -49,19 +49,19 @@ pub fn zip(
         if let Ok(to) = from.strip_prefix(&cfg.source.dir) {
             let to = root.join(to);
             if from.is_dir() {
-                zip.add_directory_from_path(&to, Default::default())
+                zip.add_directory(to.to_string_lossy(), Default::default())
                     .context("Failed to write to the zip file")?;
             } else if from.is_file() {
                 let mut file =
                     File::open(&from).context(format!("Failed to read file {}", from.display()))?;
-                zip.start_file_from_path(&to, fo)
+                zip.start_file(to.to_string_lossy(), fo)
                     .context("Failed to write to the zip file")?;
                 io::copy(&mut file, &mut zip).context("Failed to write to the zip file")?;
             }
         }
     }
 
-    zip.start_file_from_path(&root.join("info.json"), fo)
+    zip.start_file(root.join("info.json").to_string_lossy(), fo)
         .context("Failed to write to the zip file")?;
     zip.write_all(&info)
         .context("Failed to write to the zip file")?;
