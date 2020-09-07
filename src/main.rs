@@ -112,7 +112,7 @@ async fn main() -> Result<()> {
         release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
         publish::update_mod(&client, mod_name, upload_token, zip.into_inner())
             .await
-            .context("Failed to update mod")?;
+            .context(format!("Failed to publish {}", mod_name))?;
 
         if publish::check_mod(mod_name, mod_version)
             .await
