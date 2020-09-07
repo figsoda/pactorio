@@ -117,13 +117,13 @@ async fn main() -> Result<()> {
         if publish::check_mod(mod_name, mod_version)
             .await
             .context(format!(
-                "Failed to query mod {}, but it could be released successfully",
+                "Failed to query mod {}, but it could be published successfully",
                 mod_name
             ))?
         {
-            println!("{} v{} released successfully", mod_name, mod_version);
+            println!("{} v{} published successfully", mod_name, mod_version);
         } else {
-            bail!("Failed to release {}", mod_name);
+            bail!("Failed to publish {}", mod_name);
         }
     } else if opt.zip {
         fs::create_dir_all(&opt.output)
