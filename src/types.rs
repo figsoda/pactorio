@@ -123,10 +123,6 @@ pub struct ModRelease {
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum ModQuery {
-    Err {
-        message: String,
-    },
-    Mod {
-        releases: Vec<ModRelease>,
-    },
+    Err { message: String },
+    Mod { releases: Vec<ModRelease> },
 }
