@@ -60,7 +60,7 @@ async fn main() -> Result<()> {
                     cfg.source.dir,
                 ))?
                 .path()
-                .to_owned(),
+                .into(),
         );
     }
 
