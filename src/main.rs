@@ -13,7 +13,7 @@ use walkdir::WalkDir;
 use std::{
     fs::{self, File},
     io::Cursor,
-    path::{Path, PathBuf},
+    path::Path,
 };
 
 /// Factorio mod packager https://github.com/figsoda/pactorio
@@ -139,7 +139,7 @@ async fn main() -> Result<()> {
         let file = File::create(&output)
             .context(format!("Failed to create zip file {}", output.display()))?;
 
-        release::zip(files, info, cfg, file, PathBuf::from(file_name))?;
+        release::zip(files, info, cfg, file, file_name.into())?;
     } else {
         let output = Path::new(&opt.output).join(file_name);
         if output.is_dir() {
