@@ -1,6 +1,6 @@
-use crate::types::UploadResult;
+use crate::types::{ModQuery, ModRelease, UploadResult};
 
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, bail, Result};
 use regex::Regex;
 use reqwest::{
     multipart::{Form, Part},
@@ -11,6 +11,28 @@ use rprompt::prompt_reply_stdout;
 use select::{document::Document, predicate::Attr};
 
 use std::fmt::Display;
+
+pub async fn check_mod(
+    mod_name: impl Display,
+    mod_version: impl PartialEq<String>,
+) -> Result<bool> {
+    match reqwest::get(&format!("https://mods.factorio.com/api/mods/{}", mod_name))
+        .await?
+        .json()
+        .await?
+    {
+        ModQuery::Err { message } => bail!(message),
+        ModQuery::Mod { releases } => {
+            for ModRelease { version } in releases {
+                if mod_version == version {
+                    return Ok(true);
+                }
+            }
+        }
+    }
+
+    Ok(false)
+}
 
 pub async fn get_csrf_token(client: &Client) -> Result<String> {
     let doc: Document = client

@@ -4,7 +4,7 @@ mod types;
 
 use crate::types::{Config, Info};
 
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use reqwest::Client;
 use serde::Serialize;
 use structopt::StructOpt;
@@ -79,6 +79,16 @@ async fn main() -> Result<()> {
 
     let file_name = format!("{}_{}", cfg.package.name, cfg.package.version);
     if opt.publish {
+        let mod_name = &cfg.package.name;
+        let mod_version = &cfg.package.version;
+
+        if publish::check_mod(mod_name, mod_version.clone())
+            .await
+            .context(format!("Failed to query mod {}", mod_name))?
+        {
+            bail!("{} v{} already exists", mod_name, mod_version);
+        }
+
         let client = Client::builder()
             .cookie_store(true)
             .build()
@@ -94,13 +104,13 @@ async fn main() -> Result<()> {
             .context("Failed to login to Factorio")?;
         println!("Processing...");
 
-        let upload_token = publish::get_upload_token(&client, &cfg.package.name)
+        let upload_token = publish::get_upload_token(&client, mod_name)
             .await
             .context("Failed to fetch upload token")?;
 
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
-        publish::update_mod(&client, cfg.package.name, upload_token, zip.into_inner())
+        publish::update_mod(&client, mod_name, upload_token, zip.into_inner())
             .await
             .context("Failed to update mod")?;
     } else if opt.zip {

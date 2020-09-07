@@ -114,3 +114,19 @@ pub struct UploadResult {
     pub info: String,
     pub thumbnail: Option<String>,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct ModRelease {
+    pub version: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+pub enum ModQuery {
+    Err {
+        message: String,
+    },
+    Mod {
+        releases: Vec<ModRelease>,
+    },
+}
