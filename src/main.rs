@@ -113,6 +113,18 @@ async fn main() -> Result<()> {
         publish::update_mod(&client, mod_name, upload_token, zip.into_inner())
             .await
             .context("Failed to update mod")?;
+
+        if publish::check_mod(mod_name, mod_version)
+            .await
+            .context(format!(
+                "Failed to query mod {}, but it could be released successfully",
+                mod_name
+            ))?
+        {
+            println!("{} v{} released successfully", mod_name, mod_version);
+        } else {
+            bail!("Failed to release {}", mod_name);
+        }
     } else if opt.zip {
         fs::create_dir_all(&opt.output)
             .context(format!("Failed to create directory {}", opt.output))?;
