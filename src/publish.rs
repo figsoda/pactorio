@@ -110,7 +110,7 @@ pub async fn update_mod(
         )
         .send()
         .await?
-        .json::<UploadResult>()
+        .json()
         .await?;
     client
         .post(&format!(
