@@ -7,10 +7,10 @@ jobs:
     name: clippy
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: install rust toolchain
+      - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -18,7 +18,7 @@ jobs:
           components: clippy
           override: true
 
-      - name: clippy
+      - name: Cargo clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
@@ -28,10 +28,10 @@ jobs:
     name: rustfmt
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: install rust toolchain
+      - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -39,7 +39,7 @@ jobs:
           components: rustfmt
           override: true
 
-      - name: rustfmt
+      - name: Cargo fmt
         uses: actions-rs/cargo@v1
         with:
           command: fmt
