@@ -47,9 +47,9 @@ pub async fn get_csrf_token(client: &Client) -> Result<String> {
     let csrf_token = doc
         .find(Attr("id", "csrf_token"))
         .next()
-        .ok_or(anyhow!("Cannot find node with id=\"csrf_token\""))?
+        .ok_or_else(|| anyhow!("Cannot find node with id=\"csrf_token\""))?
         .attr("value")
-        .ok_or(anyhow!("Node does not contain attribute named \"value\""))?
+        .ok_or_else(|| anyhow!("Node does not contain attribute named \"value\""))?
         .into();
 
     Ok(csrf_token)
@@ -83,7 +83,7 @@ pub async fn get_upload_token(client: &Client, mod_name: impl Display) -> Result
                 .text()
                 .await?,
         )
-        .ok_or(anyhow!("Cannot find a match with regex"))?[1]
+        .ok_or_else(|| anyhow!("Cannot find a match with regex"))?[1]
         .into();
     Ok(upload_token)
 }
