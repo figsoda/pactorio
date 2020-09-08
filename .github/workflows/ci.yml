@@ -1,16 +1,16 @@
-name: CI
+name: ci
 
 on: [push, pull_request]
 
 jobs:
   clippy:
-    name: Clippy
+    name: clippy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
 
-      - name: Install rust toolchain
+      - name: install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -18,20 +18,20 @@ jobs:
           components: clippy
           override: true
 
-      - name: Clippy
+      - name: clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: -- -D warnings
 
   rustfmt:
-    name: Rustfmt
+    name: rustfmt
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
 
-      - name: Install rust toolchain
+      - name: install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -39,7 +39,7 @@ jobs:
           components: rustfmt
           override: true
 
-      - name: Rustfmt
+      - name: rustfmt
         uses: actions-rs/cargo@v1
         with:
           command: fmt
