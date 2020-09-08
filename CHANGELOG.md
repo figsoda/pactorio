@@ -1,5 +1,16 @@
 # Changelog
 
+
+## 0.4.1 - 2020-09-08
+
+### Changes
+- Switched from native-tls to rustls, no longer depend on openssl on linux
+
+### Features
+- Check if mod version already exist before publishing
+- Check if the mod got published successfully
+
+
 ## 0.4.0 - 2020-09-06
 
 ### Changes
