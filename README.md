@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/crates/v/pactorio?style=flat-square)][Crate]
 [![Downloads](https://img.shields.io/crates/d/pactorio?style=flat-square)][Crate]
 [![License](https://img.shields.io/crates/l/pactorio?style=flat-square)](https://github.com/figsoda/pactorio/blob/master/LICENSE)
-[![Status](https://img.shields.io/github/workflow/status/figsoda/pactorio/CI?style=flat-square)](https://github.com/figsoda/pactorio/actions)
+[![CI](https://img.shields.io/github/workflow/status/figsoda/pactorio/CI?label=CI&logo=github&style=flat-square)](https://github.com/figsoda/pactorio/actions?query=workflow:CI)
 
 [Crate]: https://crates.io/crates/pactorio
 
