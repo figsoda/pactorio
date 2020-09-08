@@ -1,9 +1,9 @@
 # Pactorio
 
-[![version](https://img.shields.io/crates/v/pactorio.svg?style=flat-square)][Crate]
-[![downloads](https://img.shields.io/crates/d/pactorio.svg?style=flat-square)][Crate]
-[![license](https://img.shields.io/crates/l/pactorio.svg?style=flat-square)](https://github.com/figsoda/pactorio/blob/master/LICENSE)
-[![top language](https://img.shields.io/github/languages/top/figsoda/pactorio.svg?style=flat-square)](https://www.rust-lang.org/)
+[![Version](https://img.shields.io/crates/v/pactorio?style=flat-square)][Crate]
+[![Downloads](https://img.shields.io/crates/d/pactorio?style=flat-square)][Crate]
+[![License](https://img.shields.io/crates/l/pactorio?style=flat-square)](https://github.com/figsoda/pactorio/blob/master/LICENSE)
+[![Status](https://img.shields.io/github/workflow/status/figsoda/pactorio/CI?style=flat-square)](https://github.com/figsoda/pactorio/actions)
 
 [Crate]: https://crates.io/crates/pactorio
 
