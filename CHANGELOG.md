@@ -1,5 +1,16 @@
 # Changelog
 
+---
+
+## 0.4.2 - 2020-09-10
+
+### Changes
+- `pactorio -pz` now outputs a zip in addition to publishing to mod portal
+
+### Documentation
+- Configuration instructions in [README.md](https://github.com/figsoda/pactorio/blob/master/README.md)
+
+---
 
 ## 0.4.1 - 2020-09-08
 
@@ -10,6 +21,7 @@
 - Check if mod version already exist before publishing
 - Check if the mod got published successfully
 
+---
 
 ## 0.4.0 - 2020-09-06
 
@@ -19,12 +31,14 @@
 ### Features
 - Option to publish the mod to mod portal directly
 
+---
 
 ## 0.3.2 - 2020-09-06
 
 ### Fixes
 - Now outputs the zip with the correct mod structure
 
+---
 
 ## 0.3.1 - 2020-09-05
 
@@ -34,6 +48,7 @@
 ### Optimization
 - Revamped code for future extensions
 
+---
 
 ## 0.3.0 - 2020-09-04
 
