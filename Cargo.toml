@@ -1,3 +1,5 @@
+cargo-features = ["strip"]
+
 [package]
 name = "pactorio"
 version = "0.4.1"
@@ -29,3 +31,6 @@ zip = { version = "0.5.7", default_features = false }
 version = "0.10.8"
 default_features = false
 features = ["cookies", "json", "rustls-tls"]
+
+[profile.release]
+strip = "symbols"
