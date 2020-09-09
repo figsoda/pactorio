@@ -82,6 +82,9 @@ async fn main() -> Result<()> {
         let mod_name = &cfg.package.name;
         let mod_version = &cfg.package.version;
 
+        let mut zip = Cursor::new(Vec::with_capacity(256));
+        release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
+
         if publish::check_mod(mod_name, mod_version)
             .await
             .context(format!("Failed to query mod {}", mod_name))?
@@ -108,8 +111,6 @@ async fn main() -> Result<()> {
             .await
             .context("Failed to fetch upload token")?;
 
-        let mut zip = Cursor::new(Vec::with_capacity(256));
-        release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
         publish::update_mod(&client, mod_name, upload_token, zip.into_inner())
             .await
             .context(format!("Failed to publish {}", mod_name))?;
