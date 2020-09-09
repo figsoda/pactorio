@@ -3,9 +3,7 @@
 [![Version](https://img.shields.io/crates/v/pactorio?style=flat-square)][Crate]
 [![Downloads](https://img.shields.io/crates/d/pactorio?style=flat-square)][Crate]
 [![License](https://img.shields.io/crates/l/pactorio?style=flat-square)](https://github.com/figsoda/pactorio/blob/master/LICENSE)
-[![CI](https://img.shields.io/github/workflow/status/figsoda/pactorio/ci?label=CI&logo=github&style=flat-square)](https://github.com/figsoda/pactorio/actions?query=workflow:ci)
-
-[Crate]: https://crates.io/crates/pactorio
+[![ci](https://img.shields.io/github/workflow/status/figsoda/pactorio/ci?label=ci&logo=github&style=flat-square)](https://github.com/figsoda/pactorio/actions?query=workflow:ci)
 
 Pactorio is a tool that packages factorio mods and uses toml for config files. 
 
@@ -119,7 +117,7 @@ hidden_dep = "> 2.0"
 dir = "src"
 ```
 
-</details>
-
 ## Changelog
 See [CHANGELOG.md](https://github.com/figsoda/pactorio/blob/master/CHANGELOG.md)
+
+[Crate]: https://crates.io/crates/pactorio
