@@ -9,7 +9,12 @@
 
 Pactorio is a tool that packages factorio mods and uses toml for config files. 
 
-## Installing with cargo
+## Installation
+
+The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest). 
+
+Alternatively you can install pactorio from [crates.io][Crate] with cargo. 
+
 ```
 cargo install pactorio
 ```
