@@ -56,7 +56,7 @@ jobs:
           args: --release --target=${{ matrix.target }}
 
       - name: Set file extension
-        if: ${{ contains(matrix.target, "windows") }}
+        if: ${{ contains(matrix.target, 'windows') }}
         run: echo "::set-env name=EXT::.exe"
 
       - name: Upload release asset
