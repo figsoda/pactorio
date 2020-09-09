@@ -79,9 +79,6 @@ async fn main() -> Result<()> {
 
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
     if opt.publish {
-        let mod_name = &cfg.package.name;
-        let mod_version = &cfg.package.version;
-
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
 
@@ -96,10 +93,14 @@ async fn main() -> Result<()> {
                 fs::remove_file(&output)
                     .context(format!("Failed to remove file {}", output.display()))?;
             }
+
             let mut file = File::create(&output)
                 .context(format!("Failed to create zip file {}", output.display()))?;
             std::io::copy(&mut &zip.get_ref()[..], &mut file)?;
         }
+
+        let mod_name = &cfg.package.name;
+        let mod_version = &cfg.package.version;
 
         if publish::check_mod(mod_name, mod_version)
             .await
@@ -153,9 +154,9 @@ async fn main() -> Result<()> {
             fs::remove_file(&output)
                 .context(format!("Failed to remove file {}", output.display()))?;
         }
+
         let file = File::create(&output)
             .context(format!("Failed to create zip file {}", output.display()))?;
-
         release::zip(files, info, cfg, file, file_name.into())?;
     } else {
         let output = Path::new(&opt.output).join(file_name);
