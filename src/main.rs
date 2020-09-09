@@ -77,13 +77,29 @@ async fn main() -> Result<()> {
         writer
     };
 
-    let file_name = format!("{}_{}", cfg.package.name, cfg.package.version);
+    let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
     if opt.publish {
         let mod_name = &cfg.package.name;
         let mod_version = &cfg.package.version;
 
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
+
+        if opt.zip {
+            fs::create_dir_all(&opt.output)
+                .context(format!("Failed to create directory {}", opt.output))?;
+            let output = Path::new(&opt.output).join(format!("{}.zip", file_name));
+            if output.is_dir() {
+                fs::remove_dir_all(&output)
+                    .context(format!("Failed to remove directory {}", output.display()))?;
+            } else if output.is_file() {
+                fs::remove_file(&output)
+                    .context(format!("Failed to remove file {}", output.display()))?;
+            }
+            let mut file = File::create(&output)
+                .context(format!("Failed to create zip file {}", output.display()))?;
+            std::io::copy(&mut &zip.get_ref()[..], &mut file)?;
+        }
 
         if publish::check_mod(mod_name, mod_version)
             .await
