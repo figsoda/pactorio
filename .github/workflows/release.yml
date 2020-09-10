@@ -41,6 +41,9 @@ jobs:
             ext: .exe
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            use-cross: true
 
     steps:
       - name: Checkout
@@ -57,6 +60,7 @@ jobs:
       - name: Cargo build
         uses: actions-rs/cargo@v1
         with:
+          use-cross: ${{ matrix.use-cross }}
           command: build
           args: --release --target ${{ matrix.target }}
 
