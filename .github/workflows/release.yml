@@ -58,7 +58,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target=${{ matrix.target }}
+          args: --release --target ${{ matrix.target }}
 
       - name: Upload release asset
         uses: actions/upload-release-asset@v1
