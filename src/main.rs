@@ -101,16 +101,11 @@ async fn main() -> Result<()> {
         if opt.zip {
             fs::create_dir_all(&opt.output)
                 .context(format!("Failed to create directory {}", opt.output))?;
-            let output = Path::new(&opt.output).join(format!("{}.zip", file_name));
-            if output.is_dir() {
-                fs::remove_dir_all(&output)
-                    .context(format!("Failed to remove directory {}", output.display()))?;
-            } else if output.is_file() {
-                fs::remove_file(&output)
-                    .context(format!("Failed to remove file {}", output.display()))?;
-            }
 
-            let mut file = File::create(&output)
+            let output = &Path::new(&opt.output).join(format!("{}.zip", file_name));
+            release::remove_path(output)?;
+
+            let mut file = File::create(output)
                 .context(format!("Failed to create zip file {}", output.display()))?;
             std::io::copy(&mut &zip.get_ref()[..], &mut file)
                 .context("Failed to write to the zip file")?;
@@ -163,28 +158,18 @@ async fn main() -> Result<()> {
     } else if opt.zip {
         fs::create_dir_all(&opt.output)
             .context(format!("Failed to create directory {}", opt.output))?;
-        let output = Path::new(&opt.output).join(format!("{}.zip", file_name));
-        if output.is_dir() {
-            fs::remove_dir_all(&output)
-                .context(format!("Failed to remove directory {}", output.display()))?;
-        } else if output.is_file() {
-            fs::remove_file(&output)
-                .context(format!("Failed to remove file {}", output.display()))?;
-        }
 
-        let file = File::create(&output)
+        let output = &Path::new(&opt.output).join(format!("{}.zip", file_name));
+        release::remove_path(output)?;
+
+        let file = File::create(output)
             .context(format!("Failed to create zip file {}", output.display()))?;
         release::zip(files, info, file, file_name.into())?;
     } else {
-        let output = Path::new(&opt.output).join(file_name);
-        if output.is_dir() {
-            fs::remove_dir_all(&output)
-                .context(format!("Failed to remove directory {}", output.display()))?;
-        } else if output.is_file() {
-            fs::remove_file(&output)
-                .context(format!("Failed to remove file {}", output.display()))?;
-        }
-        fs::create_dir_all(&output)
+        let output = &Path::new(&opt.output).join(file_name);
+
+        release::remove_path(output)?;
+        fs::create_dir_all(output)
             .context(format!("Failed to create directory {}", output.display()))?;
 
         release::folder(files, info, output)?;

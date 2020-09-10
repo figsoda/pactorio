@@ -4,10 +4,21 @@ use zip::{write::FileOptions, CompressionMethod, ZipWriter};
 use std::{
     fs::{self, File},
     io::{self, Seek, Write},
-    path::PathBuf,
+    path::{Path, PathBuf},
 };
 
-pub fn folder(files: Vec<(PathBuf, PathBuf)>, info: Vec<u8>, output: PathBuf) -> Result<()> {
+pub fn remove_path(path: &Path) -> Result<()> {
+    if path.is_dir() {
+        fs::remove_dir_all(path)
+            .context(format!("Failed to remove directory {}", path.display()))?;
+    } else if path.is_file() {
+        fs::remove_file(path).context(format!("Failed to remove file {}", path.display()))?;
+    }
+
+    Ok(())
+}
+
+pub fn folder(files: Vec<(PathBuf, PathBuf)>, info: Vec<u8>, output: &Path) -> Result<()> {
     for (from, to) in files {
         let to = output.join(to);
         let todir = to
