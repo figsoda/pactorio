@@ -1,6 +1,12 @@
 # Changelog
 
 
+## v0.4.3 - 2020-09-10
+
+### Features
+- New config `source.include` to filter source directory with glob patterns
+
+
 ## v0.4.2 - 2020-09-09
 
 ### Changes
