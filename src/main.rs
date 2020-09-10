@@ -5,6 +5,7 @@ mod types;
 use crate::types::{Config, Info};
 
 use anyhow::{bail, Context, Result};
+use globset::{Glob, GlobSetBuilder};
 use reqwest::Client;
 use serde::Serialize;
 use structopt::StructOpt;
@@ -51,6 +52,12 @@ async fn main() -> Result<()> {
     )
     .context(format!("Failed to parse the config file {}", opt.input))?;
 
+    let mut globs = GlobSetBuilder::new();
+    for pat in &cfg.source.include {
+        globs.add(Glob::new(pat).context(format!("Failed to parse glob pattern {}", pat))?);
+    }
+    let globs = globs.build().context("Failed to build glob set")?;
+
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
         let entry = entry
@@ -59,7 +66,18 @@ async fn main() -> Result<()> {
                 cfg.source.dir,
             ))?
             .into_path();
-        files.push((entry.clone(), entry.strip_prefix(&cfg.source.dir)?.into()));
+        if globs.is_match(&entry) {
+            files.push((
+                entry.clone(),
+                entry
+                    .strip_prefix(&cfg.source.dir)
+                    .context(format!(
+                        "Failed when traversing the source directory {}",
+                        cfg.source.dir
+                    ))?
+                    .into(),
+            ));
+        }
     }
 
     let info = Info::from(cfg.clone());

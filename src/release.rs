@@ -10,9 +10,8 @@ use std::{
 pub fn folder(files: Vec<(PathBuf, PathBuf)>, info: Vec<u8>, output: PathBuf) -> Result<()> {
     for (from, to) in files {
         let to = output.join(to);
-        if from.is_dir() {
-            fs::create_dir(&to).context(format!("Failed to create directory {}", to.display()))?;
-        } else if from.is_file() {
+        if from.is_file() {
+            fs::create_dir_all(to.parent().unwrap())?;
             fs::copy(&from, &to).context(format!(
                 "Failed to copy from {} to {}",
                 from.display(),
@@ -41,10 +40,7 @@ pub fn zip(
 
     for (from, to) in files {
         let to = root.join(to);
-        if from.is_dir() {
-            zip.add_directory(to.to_string_lossy(), Default::default())
-                .context("Failed to write to the zip file")?;
-        } else if from.is_file() {
+        if from.is_file() {
             let mut file =
                 File::open(&from).context(format!("Failed to read file {}", from.display()))?;
             zip.start_file(to.to_string_lossy(), fo)

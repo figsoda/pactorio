@@ -30,13 +30,25 @@ pub struct Package {
 #[derive(Clone, Debug, Deserialize)]
 pub struct Source {
     #[serde(alias = "directory")]
+    #[serde(default = "default_source_dir")]
     pub dir: String,
+    #[serde(default = "default_source_include")]
+    pub include: Vec<String>,
+}
+
+fn default_source_dir() -> String {
+    String::from("src")
+}
+
+fn default_source_include() -> Vec<String> {
+    vec![String::from("**/**")]
 }
 
 impl Default for Source {
     fn default() -> Source {
         Source {
-            dir: String::from("src"),
+            dir: default_source_dir(),
+            include: default_source_include(),
         }
     }
 }
