@@ -112,7 +112,8 @@ async fn main() -> Result<()> {
 
             let mut file = File::create(&output)
                 .context(format!("Failed to create zip file {}", output.display()))?;
-            std::io::copy(&mut &zip.get_ref()[..], &mut file)?;
+            std::io::copy(&mut &zip.get_ref()[..], &mut file)
+                .context("Failed to write to the zip file")?;
         }
 
         let mod_name = &cfg.package.name;

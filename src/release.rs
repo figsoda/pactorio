@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use zip::{write::FileOptions, CompressionMethod, ZipWriter};
 
 use std::{
@@ -10,8 +10,13 @@ use std::{
 pub fn folder(files: Vec<(PathBuf, PathBuf)>, info: Vec<u8>, output: PathBuf) -> Result<()> {
     for (from, to) in files {
         let to = output.join(to);
+        let todir = to
+            .parent()
+            .ok_or_else(|| anyhow!("Cannot find the parent of {}", to.display()))?;
+
         if from.is_file() {
-            fs::create_dir_all(to.parent().unwrap())?;
+            fs::create_dir_all(todir)
+                .context(format!("Failed to create directory {}", todir.display()))?;
             fs::copy(&from, &to).context(format!(
                 "Failed to copy from {} to {}",
                 from.display(),
