@@ -15,6 +15,7 @@ categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
 anyhow = "1.0.32"
+globset = "0.4.5"
 regex = "1.3.9"
 rpassword = "5.0.0"
 rprompt = "1.0.5"
