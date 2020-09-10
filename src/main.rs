@@ -53,15 +53,13 @@ async fn main() -> Result<()> {
 
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
-        files.push(
-            entry
-                .context(format!(
-                    "Failed when traversing the source directory {}",
-                    cfg.source.dir,
-                ))?
-                .path()
-                .into(),
-        );
+        let entry = entry
+            .context(format!(
+                "Failed when traversing the source directory {}",
+                cfg.source.dir,
+            ))?
+            .into_path();
+        files.push((entry.clone(), entry.strip_prefix(&cfg.source.dir)?.into()));
     }
 
     let info = Info::from(cfg.clone());
@@ -80,7 +78,7 @@ async fn main() -> Result<()> {
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
     if opt.publish {
         let mut zip = Cursor::new(Vec::with_capacity(256));
-        release::zip(files, info, cfg.clone(), &mut zip, file_name.into())?;
+        release::zip(files, info, &mut zip, file_name.into())?;
 
         if opt.zip {
             fs::create_dir_all(&opt.output)
@@ -157,7 +155,7 @@ async fn main() -> Result<()> {
 
         let file = File::create(&output)
             .context(format!("Failed to create zip file {}", output.display()))?;
-        release::zip(files, info, cfg, file, file_name.into())?;
+        release::zip(files, info, file, file_name.into())?;
     } else {
         let output = Path::new(&opt.output).join(file_name);
         if output.is_dir() {
@@ -170,7 +168,7 @@ async fn main() -> Result<()> {
         fs::create_dir_all(&output)
             .context(format!("Failed to create directory {}", output.display()))?;
 
-        release::folder(files, info, cfg, output)?;
+        release::folder(files, info, output)?;
     }
 
     Ok(())
