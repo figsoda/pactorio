@@ -109,12 +109,17 @@ opt_dep = "= 0.2.1"
 hidden_dep = "> 2.0"
 
 
-# Source directory
-# Optional, default to "src"
+# Optional, source directory
 [source]
 
 # Pactorio will use all the files under this directory
+# Optional, default to "0.3.2"
 dir = "src"
+
+# A list of glob patterns to represent the files to include
+# Relative to your source directory
+# Optional, default to ["**/**"]
+include = ["**/**"]
 ```
 
 ## Changelog
