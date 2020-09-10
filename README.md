@@ -69,7 +69,7 @@ homepage = "https://you.example.com"
 # Optional, short description of your mod
 description = "Example mod. Does something and some other things. "
 
-# Optional, default to "0.12", usually needs to be added
+# Optional, default: "0.12", usually needs to be added
 factorio_version = "1.0"
 
 
@@ -81,44 +81,45 @@ factorio_version = "1.0"
 # Required dependencies
 [deps.required]
 
-# Equal to "base >= 1.0" in info.json
+# Same as "base >= 1.0" in info.json
 base = ">= 1.0"
 
 
 # Conflict or incompatible dependencies
 [deps.conflict] # or [deps.incompatible]
 
-# Equal to "! bad_mod" in info.json
+# Same as "! bad_mod" in info.json
 bad_mod = ""
 
-# Equal to "! incomp < 3" in info.json
+# Same as "! incomp < 3" in info.json
 incomp = "< 3"
 
 
 # Optional dependencies
 [deps.optional]
 
-# Equal to "opt_dep = 0.2.1" in info.json
+# Same as "opt_dep = 0.2.1" in info.json
 opt_dep = "= 0.2.1"
 
 
 # Hidden optional dependencies
 [deps.hidden]
 
-# Equal to "hidden_dep > 2.0" in info.json
+# Same as "hidden_dep > 2.0" in info.json
 hidden_dep = "> 2.0"
+
 
 
 # Optional, source directory
 [source]
 
 # Pactorio will use all the files under this directory
-# Optional, default to "0.3.2"
+# Optional, default: "src"
 dir = "src"
 
 # A list of glob patterns to represent the files to include
 # Relative to your source directory
-# Optional, default to ["**/**"]
+# Optional, default: ["**/**"]
 include = ["**/**"]
 ```
 
