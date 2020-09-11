@@ -1,5 +1,3 @@
-#![feature(format_args_capture)]
-
 mod fail;
 mod publish;
 mod release;
