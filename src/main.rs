@@ -1,3 +1,6 @@
+#![feature(format_args_capture)]
+
+mod fail;
 mod publish;
 mod release;
 mod types;
@@ -46,35 +49,27 @@ struct Opt {
 async fn main() -> Result<()> {
     let opt = Opt::from_args();
 
-    let cfg: Config = toml::from_str(
-        &fs::read_to_string(&opt.input)
-            .context(format!("Failed to read the config file {}", opt.input))?,
-    )
-    .context(format!("Failed to parse the config file {}", opt.input))?;
+    let cfg: Config =
+        toml::from_str(&fs::read_to_string(&opt.input).with_context(fail::read(&opt.input))?)
+            .with_context(fail::parse_cfg(&opt.input))?;
 
     let mut globs = GlobSetBuilder::new();
     for pat in &cfg.source.include {
-        globs.add(Glob::new(pat).context(format!("Failed to parse glob pattern {}", pat))?);
+        globs.add(Glob::new(pat).with_context(fail::parse_glob(pat))?);
     }
     let globs = globs.build().context("Failed to build glob set")?;
 
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
         let entry = entry
-            .context(format!(
-                "Failed when traversing the source directory {}",
-                cfg.source.dir,
-            ))?
+            .with_context(fail::traverse(&cfg.source.dir))?
             .into_path();
         if globs.is_match(&entry) {
             files.push((
                 entry.clone(),
                 entry
                     .strip_prefix(&cfg.source.dir)
-                    .context(format!(
-                        "Failed when traversing the source directory {}",
-                        cfg.source.dir
-                    ))?
+                    .with_context(fail::traverse(&cfg.source.dir))?
                     .into(),
             ));
         }
@@ -99,14 +94,13 @@ async fn main() -> Result<()> {
         release::zip(files, info, &mut zip, file_name.into())?;
 
         if opt.zip {
-            fs::create_dir_all(&opt.output)
-                .context(format!("Failed to create directory {}", opt.output))?;
+            fs::create_dir_all(&opt.output).with_context(fail::create_dir(&opt.output))?;
 
             let output = &Path::new(&opt.output).join(format!("{}.zip", file_name));
             release::remove_path(output)?;
 
-            let mut file = File::create(output)
-                .context(format!("Failed to create zip file {}", output.display()))?;
+            let mut file =
+                File::create(output).with_context(fail::create_file(output.display()))?;
             std::io::copy(&mut &zip.get_ref()[..], &mut file)
                 .context("Failed to write to the zip file")?;
         }
@@ -116,9 +110,9 @@ async fn main() -> Result<()> {
 
         if publish::check_mod(mod_name, mod_version)
             .await
-            .context(format!("Failed to query mod {}", mod_name))?
+            .with_context(fail::query_mod(mod_name, mod_version))?
         {
-            bail!("{} v{} already exists", mod_name, mod_version);
+            bail!("{mod_name} v{mod_version} already exists");
         }
 
         let client = Client::builder()
@@ -134,7 +128,6 @@ async fn main() -> Result<()> {
         publish::login(&client, csrf_token)
             .await
             .context("Failed to login to Factorio")?;
-        println!("Processing...");
 
         let upload_token = publish::get_upload_token(&client, mod_name)
             .await
@@ -142,35 +135,29 @@ async fn main() -> Result<()> {
 
         publish::update_mod(&client, mod_name, upload_token, zip.into_inner())
             .await
-            .context(format!("Failed to publish {}", mod_name))?;
+            .with_context(fail::publish(mod_name, mod_version))?;
 
         if publish::check_mod(mod_name, mod_version)
             .await
-            .context(format!(
-                "Failed to query mod {}, but it could be published successfully",
-                mod_name
-            ))?
+            .with_context(fail::query_published(mod_name, mod_version))?
         {
             println!("{} v{} published successfully", mod_name, mod_version);
         } else {
             bail!("Failed to publish {}", mod_name);
         }
     } else if opt.zip {
-        fs::create_dir_all(&opt.output)
-            .context(format!("Failed to create directory {}", opt.output))?;
+        fs::create_dir_all(&opt.output).with_context(fail::create_dir(&opt.output))?;
 
         let output = &Path::new(&opt.output).join(format!("{}.zip", file_name));
         release::remove_path(output)?;
 
-        let file = File::create(output)
-            .context(format!("Failed to create zip file {}", output.display()))?;
+        let file = File::create(output).with_context(fail::create_file(output.display()))?;
         release::zip(files, info, file, file_name.into())?;
     } else {
         let output = &Path::new(&opt.output).join(file_name);
 
         release::remove_path(output)?;
-        fs::create_dir_all(output)
-            .context(format!("Failed to create directory {}", output.display()))?;
+        fs::create_dir_all(output).with_context(fail::create_dir(output.display()))?;
 
         release::folder(files, info, output)?;
     }

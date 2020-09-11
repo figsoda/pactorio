@@ -1,6 +1,8 @@
 use anyhow::{anyhow, Context, Result};
 use zip::{write::FileOptions, CompressionMethod, ZipWriter};
 
+use crate::fail;
+
 use std::{
     fs::{self, File},
     io::{self, Seek, Write},
@@ -9,10 +11,9 @@ use std::{
 
 pub fn remove_path(path: &Path) -> Result<()> {
     if path.is_dir() {
-        fs::remove_dir_all(path)
-            .context(format!("Failed to remove directory {}", path.display()))?;
+        fs::remove_dir_all(path).with_context(fail::remove_dir(path.display()))?;
     } else if path.is_file() {
-        fs::remove_file(path).context(format!("Failed to remove file {}", path.display()))?;
+        fs::remove_file(path).with_context(fail::remove_file(path.display()))?;
     }
 
     Ok(())
@@ -26,13 +27,8 @@ pub fn folder(files: Vec<(PathBuf, PathBuf)>, info: Vec<u8>, output: &Path) -> R
             .ok_or_else(|| anyhow!("Cannot find the parent of {}", to.display()))?;
 
         if from.is_file() {
-            fs::create_dir_all(todir)
-                .context(format!("Failed to create directory {}", todir.display()))?;
-            fs::copy(&from, &to).context(format!(
-                "Failed to copy from {} to {}",
-                from.display(),
-                to.display(),
-            ))?;
+            fs::create_dir_all(todir).with_context(fail::create_dir(todir.display()))?;
+            fs::copy(&from, &to).with_context(fail::copy_file(from.display(), to.display()))?;
         }
     }
 
@@ -57,8 +53,7 @@ pub fn zip(
     for (from, to) in files {
         let to = root.join(to);
         if from.is_file() {
-            let mut file =
-                File::open(&from).context(format!("Failed to read file {}", from.display()))?;
+            let mut file = File::open(&from).with_context(fail::read(from.display()))?;
             zip.start_file(to.to_string_lossy(), fo)
                 .context("Failed to write to the zip file")?;
             io::copy(&mut file, &mut zip).context("Failed to write to the zip file")?;
