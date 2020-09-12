@@ -121,6 +121,11 @@ dir = "src"
 # Relative to your source directory
 # Optional, default: ["**/**"]
 include = ["**/**"]
+
+# A list of glob patterns to represent the files to ignore
+# Relative to your source directory
+# Optional, default: []
+ignore = []
 ```
 
 ## Changelog
