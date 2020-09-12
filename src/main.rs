@@ -51,18 +51,18 @@ async fn main() -> Result<()> {
         toml::from_str(&fs::read_to_string(&opt.input).with_context(fail::read(&opt.input))?)
             .with_context(fail::parse_cfg(&opt.input))?;
 
-    let mut globs = GlobSetBuilder::new();
+    let mut include = GlobSetBuilder::new();
     for pat in &cfg.source.include {
-        globs.add(Glob::new(pat).with_context(fail::parse_glob(pat))?);
+        include.add(Glob::new(pat).with_context(fail::parse_glob(pat))?);
     }
-    let globs = globs.build().context("Failed to build glob set")?;
+    let include = include.build().context("Failed to build glob set")?;
 
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
         let entry = entry
             .with_context(fail::traverse(&cfg.source.dir))?
             .into_path();
-        if globs.is_match(&entry) {
+        if include.is_match(&entry) {
             files.push((
                 entry.clone(),
                 entry
