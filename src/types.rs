@@ -34,6 +34,8 @@ pub struct Source {
     pub dir: String,
     #[serde(default = "default_source_include")]
     pub include: Vec<String>,
+    #[serde(default)]
+    pub ignore: Vec<String>,
 }
 
 fn default_source_dir() -> String {
@@ -49,6 +51,7 @@ impl Default for Source {
         Source {
             dir: default_source_dir(),
             include: default_source_include(),
+            ignore: Vec::new(),
         }
     }
 }
