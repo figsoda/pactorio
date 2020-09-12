@@ -57,12 +57,18 @@ async fn main() -> Result<()> {
     }
     let include = include.build().context("Failed to build glob set")?;
 
+    let mut ignore = GlobSetBuilder::new();
+    for pat in &cfg.source.ignore {
+        ignore.add(Glob::new(pat).with_context(fail::parse_glob(pat))?);
+    }
+    let ignore = ignore.build().context("Failed to build glob set")?;
+
     let mut files = Vec::new();
     for entry in WalkDir::new(&cfg.source.dir).min_depth(1) {
         let entry = entry
             .with_context(fail::traverse(&cfg.source.dir))?
             .into_path();
-        if include.is_match(&entry) {
+        if include.is_match(&entry) && !ignore.is_match(&entry) {
             files.push((
                 entry.clone(),
                 entry
