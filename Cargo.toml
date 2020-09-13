@@ -10,7 +10,7 @@ description = "Pactorio is a tool that packages factorio mods and uses toml for 
 homepage = "https://github.com/figsoda/pactorio"
 repository = "https://github.com/figsoda/pactorio"
 readme = "README.md"
-keywords = ["factorio"]
+keywords = ["factorio", "package"]
 categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
