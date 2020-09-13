@@ -3,7 +3,7 @@ cargo-features = ["strip"]
 [package]
 name = "pactorio"
 version = "0.4.3"
-authors = ["figsoda"]
+authors = ["figsoda <figsoda@pm.me>"]
 edition = "2018"
 license = "MPL-2.0"
 description = "Pactorio is a tool that packages factorio mods and uses toml for config files. "
