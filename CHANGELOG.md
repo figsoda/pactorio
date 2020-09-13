@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v0.4.4 - 2020-09-13
+
+### Features
+- New config `source.ignore` to ignore files with glob patterns
+- Help information is now colored
+
+
 ## v0.4.3 - 2020-09-10
 
 ### Features
