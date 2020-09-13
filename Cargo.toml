@@ -2,7 +2,7 @@ cargo-features = ["strip"]
 
 [package]
 name = "pactorio"
-version = "0.4.3"
+version = "0.4.4"
 authors = ["figsoda <figsoda@pm.me>"]
 edition = "2018"
 license = "MPL-2.0"
