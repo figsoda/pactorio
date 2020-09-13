@@ -9,7 +9,7 @@ use anyhow::{bail, Context, Result};
 use globset::{Glob, GlobSetBuilder};
 use reqwest::Client;
 use serde::Serialize;
-use structopt::StructOpt;
+use structopt::{clap::AppSettings, StructOpt};
 use walkdir::WalkDir;
 
 use std::{
@@ -20,7 +20,7 @@ use std::{
 
 /// Factorio mod packager https://github.com/figsoda/pactorio
 #[derive(StructOpt)]
-#[structopt(name = "pactorio")]
+#[structopt(name = "pactorio", global_setting = AppSettings::ColoredHelp)]
 struct Opt {
     /// Output info.json compactly
     #[structopt(short, long)]
