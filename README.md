@@ -11,15 +11,18 @@ Pactorio is a tool that packages factorio mods and uses toml for config files.
 
 The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest). 
 
-Alternatively you can install pactorio from [crates.io][Crate] with cargo. 
+Alternatively you can install pactorio from [crates.io][Crate] with cargo. This requires the nightly toolchain of Rust.
 
 ```
-cargo install pactorio
+cargo +nightly install pactorio
 ```
 
 ## Building from source
+
+This requires the nightly toolchain of Rust.
+
 ```
-cargo build --release
+cargo +nightly build --release
 ```
 
 ## Usage
