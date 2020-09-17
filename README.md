@@ -7,6 +7,7 @@
 
 Pactorio is a tool that packages factorio mods and uses toml for config files.
 
+
 ## Installation
 
 The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest).
@@ -17,6 +18,7 @@ Alternatively you can install pactorio from [crates.io][Crate] with cargo. This 
 cargo +nightly install pactorio
 ```
 
+
 ## Building from source
 
 This requires the nightly toolchain of Rust.
@@ -25,21 +27,33 @@ This requires the nightly toolchain of Rust.
 cargo +nightly build --release
 ```
 
+
 ## Usage
-    pactorio [FLAGS] [OPTIONS]
+
+```
+pactorio [FLAGS] [OPTIONS]
+```
 
 ### FLAGS
-    -c, --compact    Output info.json compactly
-    -h, --help       Prints help information
-    -p, --publish    Publish to mod portal
-    -V, --version    Prints version information
-    -z, --zip        Output a zip file instead
+
+```
+-c, --compact    Output info.json compactly
+-h, --help       Prints help information
+-p, --publish    Publish to mod portal
+-V, --version    Prints version information
+-z, --zip        Output a zip file instead
+```
 
 ### OPTIONS
-    -i, --input <input>      Specify the config file to use [default: pactorio.toml]
-    -o, --output <output>    Specify the output directory [default: release]
+
+```
+-i, --input <input>      Specify the config file to use [default: pactorio.toml]
+-o, --output <output>    Specify the output directory [default: release]
+```
+
 
 ## Configuration
+
 By default, pactorio uses `pactorio.toml` as its config file.
 
 It is similar to the `info.json` file and uses [TOML](https://toml.io) syntax.
@@ -131,7 +145,9 @@ include = ["**/**"]
 ignore = []
 ```
 
+
 ## Changelog
+
 See [CHANGELOG.md](https://github.com/figsoda/pactorio/blob/master/CHANGELOG.md)
 
 [Crate]: https://crates.io/crates/pactorio
