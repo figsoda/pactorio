@@ -5,11 +5,11 @@
 [![License](https://img.shields.io/badge/license-MPL--2.0-blue?style=flat-square)](https://www.mozilla.org/en-US/MPL/2.0)
 [![ci](https://img.shields.io/github/workflow/status/figsoda/pactorio/ci?label=ci&logo=github-actions&style=flat-square)](https://github.com/figsoda/pactorio/actions?query=workflow:ci)
 
-Pactorio is a tool that packages factorio mods and uses toml for config files. 
+Pactorio is a tool that packages factorio mods and uses toml for config files.
 
 ## Installation
 
-The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest). 
+The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest).
 
 Alternatively you can install pactorio from [crates.io][Crate] with cargo. This requires the nightly toolchain of Rust.
 
@@ -40,11 +40,11 @@ cargo +nightly build --release
     -o, --output <output>    Specify the output directory [default: release]
 
 ## Configuration
-By default, pactorio uses `pactorio.toml` as its config file. 
+By default, pactorio uses `pactorio.toml` as its config file.
 
-It is similar to the `info.json` file and uses [TOML](https://toml.io) syntax. 
+It is similar to the `info.json` file and uses [TOML](https://toml.io) syntax.
 
-Here is an example of a pactorio config file. 
+Here is an example of a pactorio config file.
 
 ```toml
 # Information about your package, similar to info.json
