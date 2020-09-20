@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v0.4.5 - 2020-09-20
+
+### Features
+- `pactorio -p` can now accept up to two arguments for factorio login credentials
+
+### Fixes
+- Now outputs correct error messages when the version of the mod already exist
+
+
 ## v0.4.4 - 2020-09-13
 
 ### Features
