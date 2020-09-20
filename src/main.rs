@@ -132,13 +132,19 @@ async fn main() -> Result<()> {
 
         let mut auth = auth.into_iter();
         let (username, password) = match auth.next() {
-            Some(username) => (username, match auth.next() {
-                Some(password) => password,
-                None => prompt_password_stdout("Factorio password: ")?,
-            }),
+            Some(username) => (
+                username,
+                match auth.next() {
+                    Some(password) => password,
+                    None => prompt_password_stdout("Factorio password: ")
+                        .context("Failed to prompt for password")?,
+                },
+            ),
             None => (
-                prompt_reply_stdout("Factorio username: ")?,
-                prompt_password_stdout("Factorio password: ")?,
+                prompt_reply_stdout("Factorio username: ")
+                    .context("Failed to prompt for username")?,
+                prompt_password_stdout("Factorio password: ")
+                    .context("Failed to prompt for password")?,
             ),
         };
 
