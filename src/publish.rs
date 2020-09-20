@@ -53,7 +53,12 @@ pub async fn get_csrf_token(client: &Client) -> Result<String> {
     Ok(csrf_token)
 }
 
-pub async fn login(client: &Client, csrf_token: String, username: String, password: String) -> Result<()> {
+pub async fn login(
+    client: &Client,
+    csrf_token: String,
+    username: String,
+    password: String,
+) -> Result<()> {
     client
         .post("https://factorio.com/login?mods=1")
         .header("referer", "https://factorio.com/login")
