@@ -95,7 +95,7 @@ async fn main() -> Result<()> {
     };
 
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
-    if let Some(auth) = opt.publish {
+    if let Some(cred) = opt.publish {
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, &mut zip, file_name.into())?;
 
@@ -130,11 +130,11 @@ async fn main() -> Result<()> {
             .await
             .context("Failed to fetch csrf token")?;
 
-        let mut auth = auth.into_iter();
-        let (username, password) = match auth.next() {
+        let mut cred = cred.into_iter();
+        let (username, password) = match cred.next() {
             Some(username) => (
                 username,
-                match auth.next() {
+                match cred.next() {
                     Some(password) => password,
                     None => prompt_password_stdout("Factorio password: ")
                         .context("Failed to prompt for password")?,
