@@ -118,7 +118,7 @@ async fn main() -> Result<()> {
             .await
             .with_context(fail::query_mod(mod_name, mod_version))?
         {
-            bail!("{mod_name} v{mod_version} already exists");
+            bail!("{} v{} already exists", mod_name, mod_version);
         }
 
         let client = Client::builder()
