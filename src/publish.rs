@@ -6,8 +6,6 @@ use reqwest::{
     multipart::{Form, Part},
     Client,
 };
-use rpassword::prompt_password_stdout;
-use rprompt::prompt_reply_stdout;
 use select::{document::Document, predicate::Attr};
 
 use std::fmt::Display;
@@ -55,14 +53,14 @@ pub async fn get_csrf_token(client: &Client) -> Result<String> {
     Ok(csrf_token)
 }
 
-pub async fn login(client: &Client, csrf_token: String) -> Result<()> {
+pub async fn login(client: &Client, csrf_token: String, username: String, password: String) -> Result<()> {
     client
         .post("https://factorio.com/login?mods=1")
         .header("referer", "https://factorio.com/login")
         .form(&[
             ("csrf_token", &csrf_token),
-            ("username_or_email", &prompt_reply_stdout("Username: ")?),
-            ("password", &prompt_password_stdout("Password: ")?),
+            ("username_or_email", &username),
+            ("password", &password),
         ])
         .send()
         .await?;

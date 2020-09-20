@@ -8,6 +8,8 @@ use crate::types::{Config, Info};
 use anyhow::{bail, Context, Result};
 use globset::{Glob, GlobSetBuilder};
 use reqwest::Client;
+use rpassword::prompt_password_stdout;
+use rprompt::prompt_reply_stdout;
 use serde::Serialize;
 use structopt::{clap::AppSettings, StructOpt};
 use walkdir::WalkDir;
@@ -35,8 +37,8 @@ struct Opt {
     output: String,
 
     /// Publish to mod portal
-    #[structopt(short, long)]
-    publish: bool,
+    #[structopt(short, long, max_values = 2)]
+    publish: Option<Vec<String>>,
 
     /// Output a zip file instead
     #[structopt(short, long)]
@@ -93,7 +95,7 @@ async fn main() -> Result<()> {
     };
 
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
-    if opt.publish {
+    if let Some(auth) = opt.publish {
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, &mut zip, file_name.into())?;
 
@@ -128,8 +130,19 @@ async fn main() -> Result<()> {
             .await
             .context("Failed to fetch csrf token")?;
 
-        println!("Login to Factorio");
-        publish::login(&client, csrf_token)
+        let mut auth = auth.into_iter();
+        let (username, password) = match auth.next() {
+            Some(username) => (username, match auth.next() {
+                Some(password) => password,
+                None => prompt_password_stdout("Factorio password: ")?,
+            }),
+            None => (
+                prompt_reply_stdout("Factorio username: ")?,
+                prompt_password_stdout("Factorio password: ")?,
+            ),
+        };
+
+        publish::login(&client, csrf_token, username, password)
             .await
             .context("Failed to login to Factorio")?;
 
