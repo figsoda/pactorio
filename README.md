@@ -39,7 +39,6 @@ pactorio [FLAGS] [OPTIONS]
 ```
 -c, --compact    Output info.json compactly
 -h, --help       Prints help information
--p, --publish    Publish to mod portal
 -V, --version    Prints version information
 -z, --zip        Output a zip file instead
 ```
@@ -49,6 +48,7 @@ pactorio [FLAGS] [OPTIONS]
 ```
 -i, --input <input>      Specify the config file to use [default: pactorio.toml]
 -o, --output <output>    Specify the output directory [default: release]
+-p, --publish <publish>...    Publish to mod portal, accepts up to two arguments for username and password
 ```
 
 
