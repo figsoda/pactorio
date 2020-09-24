@@ -36,7 +36,7 @@ struct Opt {
     #[structopt(short, long, default_value = "release")]
     output: String,
 
-    /// Publish to mod portal
+    /// Publish to mod portal, accepts up to two arguments for username and password
     #[structopt(short, long, max_values = 2)]
     publish: Option<Vec<String>>,
 
