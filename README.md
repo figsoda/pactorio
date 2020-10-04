@@ -148,6 +148,6 @@ ignore = []
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/figsoda/pactorio/blob/master/CHANGELOG.md)
+See [CHANGELOG.md](https://github.com/figsoda/pactorio/blob/main/CHANGELOG.md)
 
 [Crate]: https://crates.io/crates/pactorio
