@@ -1,6 +1,12 @@
 # Changelog
 
 
+## v0.4.6 - 2020-10-18
+
+### Features
+- Option to set working directory with `-d` or `--dir`
+
+
 ## v0.4.5 - 2020-09-20
 
 ### Features
