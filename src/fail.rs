@@ -21,4 +21,5 @@ fail!(query_published name ver =
 fail!(read path = "Failed to read file {}");
 fail!(remove_dir path = "Failed to remove directory {}");
 fail!(remove_file path = "Failed to remove file {}");
+fail!(set_dir path = "Failed to set working directory to {}");
 fail!(traverse path = "Failed when traversing the source directory {}");

@@ -15,6 +15,7 @@ use structopt::{clap::AppSettings, StructOpt};
 use walkdir::WalkDir;
 
 use std::{
+    env::set_current_dir,
     fs::{self, File},
     io::Cursor,
     path::Path,
@@ -27,6 +28,10 @@ struct Opt {
     /// Output info.json compactly
     #[structopt(short, long)]
     compact: bool,
+
+    /// Set working directory
+    #[structopt(short, long)]
+    dir: Option<String>,
 
     /// Specify the config file to use
     #[structopt(short, long, default_value = "pactorio.toml")]
@@ -48,6 +53,10 @@ struct Opt {
 #[tokio::main]
 async fn main() -> Result<()> {
     let opt = Opt::from_args();
+
+    if let Some(dir) = opt.dir {
+        set_current_dir(&dir).with_context(fail::set_dir(dir))?;
+    }
 
     let cfg: Config =
         toml::from_str(&fs::read_to_string(&opt.input).with_context(fail::read(&opt.input))?)
