@@ -14,7 +14,7 @@ The latest precompiled binaries are available on [github](https://github.com/fig
 
 Alternatively you can install pactorio from [crates.io][Crate] with cargo. This requires the nightly toolchain of Rust.
 
-```
+```shell
 cargo +nightly install pactorio
 ```
 
@@ -23,7 +23,7 @@ cargo +nightly install pactorio
 
 This requires the nightly toolchain of Rust.
 
-```
+```shell
 cargo +nightly build --release
 ```
 
