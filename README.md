@@ -46,8 +46,9 @@ pactorio [FLAGS] [OPTIONS]
 ### OPTIONS
 
 ```
--i, --input <input>      Specify the config file to use [default: pactorio.toml]
--o, --output <output>    Specify the output directory [default: release]
+-d, --dir <dir>               Set working directory
+-i, --input <input>           Specify the config file to use [default: pactorio.toml]
+-o, --output <output>         Specify the output directory [default: release]
 -p, --publish <publish>...    Publish to mod portal, accepts up to two arguments for username and password
 ```
 
