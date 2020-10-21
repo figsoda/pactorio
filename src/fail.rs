@@ -1,8 +1,6 @@
-use std::fmt::Display;
-
 macro_rules! fail {
     ($n:ident $($a:ident)+ = $m:literal) => {
-        pub fn $n($( $a: impl Display ),+) -> impl FnOnce() -> String {
+        pub fn $n($( $a: impl std::fmt::Display ),+) -> impl FnOnce() -> String {
             move || format!($m, $( $a ),+)
         }
     };
