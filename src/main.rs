@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 mod fail;
 mod publish;
 mod release;
