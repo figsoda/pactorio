@@ -26,7 +26,7 @@ use std::{
 /// Factorio mod packager https://github.com/figsoda/pactorio
 #[derive(StructOpt)]
 #[structopt(name = "pactorio", global_setting = AppSettings::ColoredHelp)]
-struct Opt {
+struct Opts {
     /// Output info.json compactly
     #[structopt(short, long)]
     compact: bool,
@@ -54,15 +54,15 @@ struct Opt {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let opt = Opt::from_args();
+    let opts = Opts::from_args();
 
-    if let Some(dir) = opt.dir {
+    if let Some(dir) = opts.dir {
         set_current_dir(&dir).with_context(fail::set_dir(dir))?;
     }
 
     let cfg: Config =
-        toml::from_str(&fs::read_to_string(&opt.input).with_context(fail::read(&opt.input))?)
-            .with_context(fail::parse_cfg(&opt.input))?;
+        toml::from_str(&fs::read_to_string(&opts.input).with_context(fail::read(&opts.input))?)
+            .with_context(fail::parse_cfg(&opts.input))?;
 
     let mut include = GlobSetBuilder::new();
     for pat in &cfg.source.include {
@@ -93,7 +93,7 @@ async fn main() -> Result<()> {
     }
 
     let info = Info::from(cfg.clone());
-    let info = if opt.compact {
+    let info = if opts.compact {
         serde_json::to_vec(&info).context("Failed to generate info.json")?
     } else {
         let mut writer = Vec::with_capacity(256);
@@ -106,14 +106,14 @@ async fn main() -> Result<()> {
     };
 
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
-    if let Some(cred) = opt.publish {
+    if let Some(cred) = opts.publish {
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, &mut zip, file_name.into())?;
 
-        if opt.zip {
-            fs::create_dir_all(&opt.output).with_context(fail::create_dir(&opt.output))?;
+        if opts.zip {
+            fs::create_dir_all(&opts.output).with_context(fail::create_dir(&opts.output))?;
 
-            let output = &Path::new(&opt.output).join(format!("{}.zip", file_name));
+            let output = &Path::new(&opts.output).join(format!("{}.zip", file_name));
             release::remove_path(output)?;
 
             let mut file =
@@ -179,16 +179,16 @@ async fn main() -> Result<()> {
         } else {
             bail!("Failed to publish {}", mod_name);
         }
-    } else if opt.zip {
-        fs::create_dir_all(&opt.output).with_context(fail::create_dir(&opt.output))?;
+    } else if opts.zip {
+        fs::create_dir_all(&opts.output).with_context(fail::create_dir(&opts.output))?;
 
-        let output = &Path::new(&opt.output).join(format!("{}.zip", file_name));
+        let output = &Path::new(&opts.output).join(format!("{}.zip", file_name));
         release::remove_path(output)?;
 
         let file = File::create(output).with_context(fail::create_file(output.display()))?;
         release::zip(files, info, file, file_name.into())?;
     } else {
-        let output = &Path::new(&opt.output).join(file_name);
+        let output = &Path::new(&opts.output).join(file_name);
 
         release::remove_path(output)?;
         fs::create_dir_all(output).with_context(fail::create_dir(output.display()))?;
