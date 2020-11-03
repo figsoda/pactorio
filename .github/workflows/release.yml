@@ -20,7 +20,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Pactorio ${{ github.ref }}
-          body: "[Changelog](https://github.com/figsoda/pactorio/blob/master/CHANGELOG.md)"
+          body: "[Changelog](https://github.com/figsoda/pactorio/blob/main/CHANGELOG.md)"
           draft: false
           prerelease: false
 
