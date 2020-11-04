@@ -14,7 +14,7 @@ keywords = ["factorio", "package"]
 categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
-anyhow = "1.0.33"
+anyhow = "1.0.34"
 globset = "0.4.6"
 regex = "1.4.2"
 rpassword = "5.0.0"
