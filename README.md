@@ -47,10 +47,11 @@ pactorio [FLAGS] [OPTIONS]
 ### OPTIONS
 
 ```
--d, --dir <dir>               Set working directory
--i, --input <input>           Specify the config file to use [default: pactorio.toml]
--o, --output <output>         Specify the output directory [default: release]
--p, --publish <publish>...    Publish to mod portal, accepts up to two arguments for username and password
+    --compression <compression>    Specify the compression method, ignored without `-z/--zip` flag [default: stored]  [possible values: stored, bz2, deflate]
+-d, --dir <dir>                    Set working directory
+-i, --input <input>                Specify the config file to use [default: pactorio.toml]
+-o, --output <output>              Specify the output directory [default: release]
+-p, --publish <publish>...         Publish to mod portal, accepts up to two arguments for username and password
 ```
 
 
