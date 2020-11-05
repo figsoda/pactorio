@@ -1,6 +1,12 @@
 # Changelog
 
 
+## v0.4.8 - 2020-11-05
+
+### Features
+- Option to specify the compression method
+
+
 ## v0.4.7 - 2020-10-27
 
 ### Fixes
