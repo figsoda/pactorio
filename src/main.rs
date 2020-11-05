@@ -15,6 +15,7 @@ use rprompt::prompt_reply_stdout;
 use serde::Serialize;
 use structopt::{clap::AppSettings, StructOpt};
 use walkdir::WalkDir;
+use zip::CompressionMethod;
 
 use std::{
     env::set_current_dir,
@@ -30,6 +31,15 @@ struct Opts {
     /// Output info.json compactly
     #[structopt(short, long)]
     compact: bool,
+
+    /// Specify the compression method, ignored without `-z/--zip` flag
+    #[structopt(
+        long,
+        default_value = "stored",
+        possible_values(&["stored", "bz2", "deflate"]),
+        parse(from_str = compression_method),
+    )]
+    compression: CompressionMethod,
 
     /// Set working directory
     #[structopt(short, long)]
@@ -50,6 +60,15 @@ struct Opts {
     /// Output a zip file instead
     #[structopt(short, long)]
     zip: bool,
+}
+
+fn compression_method(compression: &str) -> CompressionMethod {
+    match compression {
+        "stored" => CompressionMethod::Stored,
+        "bz2" => CompressionMethod::Bzip2,
+        "deflate" => CompressionMethod::Deflated,
+        _ => unreachable!(),
+    }
 }
 
 #[tokio::main]
@@ -108,7 +127,7 @@ async fn main() -> Result<()> {
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
     if let Some(cred) = opts.publish {
         let mut zip = Cursor::new(Vec::with_capacity(256));
-        release::zip(files, info, &mut zip, file_name.into())?;
+        release::zip(files, info, &mut zip, file_name.into(), opts.compression)?;
 
         if opts.zip {
             fs::create_dir_all(&opts.output).with_context(fail::create_dir(&opts.output))?;
@@ -186,7 +205,7 @@ async fn main() -> Result<()> {
         release::remove_path(output)?;
 
         let file = File::create(output).with_context(fail::create_file(output.display()))?;
-        release::zip(files, info, file, file_name.into())?;
+        release::zip(files, info, file, file_name.into(), opts.compression)?;
     } else {
         let output = &Path::new(&opts.output).join(file_name);
 

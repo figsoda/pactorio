@@ -42,12 +42,13 @@ pub fn zip(
     info: Vec<u8>,
     writer: impl Write + Seek,
     root: PathBuf,
+    compression: CompressionMethod,
 ) -> Result<()> {
     let mut zip = ZipWriter::new(writer);
     zip.set_comment("");
 
     let fo = FileOptions::default()
-        .compression_method(CompressionMethod::Stored)
+        .compression_method(compression)
         .unix_permissions(0o755);
 
     for (from, to) in files {
