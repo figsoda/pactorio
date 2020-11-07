@@ -39,5 +39,6 @@ features = ["bzip2", "deflate"]
 
 [profile.release]
 lto = true
+panic = "abort"
 codegen-units = 1
 strip = "symbols"
