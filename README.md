@@ -44,11 +44,11 @@ flag | description
 
 option | description
 -|-
---compression \<METHOD> | Specify the compression method, ignored without `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate
--d, --dir \<DIRECTORY> | Set working directory
--i, --input \<FILE> | Specify the config file to use <br /> default: pactorio.toml
--o, --output \<DIRECTORY> | Specify the output directory <br /> default: release
--p, --publish \<CREDENTIAL>... | Publish to mod portal, accepts up to two arguments for username and password
+--compression \<method> | Specify the compression method, ignored without `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate
+-d, --dir \<directory> | Set working directory
+-i, --input \<file> | Specify the config file to use <br /> default: pactorio.toml
+-o, --output \<directory> | Specify the output directory <br /> default: release
+-p, --publish \<credential>... | Publish to mod portal, accepts up to two arguments for username and password
 
 
 ## Configuration
