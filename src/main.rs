@@ -43,7 +43,7 @@ struct Opts {
     compression: CompressionMethod,
 
     /// Set working directory
-    #[structopt(short, long)]
+    #[structopt(short, long, value_name = "DIRECTORY")]
     dir: Option<String>,
 
     /// Specify the config file to use
