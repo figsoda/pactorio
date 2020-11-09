@@ -35,24 +35,20 @@ cargo +nightly build --release
 pactorio [FLAGS] [OPTIONS]
 ```
 
-### FLAGS
+flag | description
+-|-
+-c, --compact | Output info.json compactly
+-h, --help | Prints help information
+-V, --version | Prints version information
+-z, --zip | Output a zip file instead
 
-```
--c, --compact    Output info.json compactly
--h, --help       Prints help information
--V, --version    Prints version information
--z, --zip        Output a zip file instead
-```
-
-### OPTIONS
-
-```
-    --compression <compression>    Specify the compression method, ignored without `-z/--zip` flag [default: stored]  [possible values: stored, bz2, deflate]
--d, --dir <dir>                    Set working directory
--i, --input <input>                Specify the config file to use [default: pactorio.toml]
--o, --output <output>              Specify the output directory [default: release]
--p, --publish <publish>...         Publish to mod portal, accepts up to two arguments for username and password
-```
+option | description
+-|-
+--compression \<METHOD> | Specify the compression method, ignored without `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate
+-d, --dir \<DIRECTORY> | Set working directory
+-i, --input \<FILE> | Specify the config file to use <br /> default: pactorio.toml
+-o, --output \<DIRECTORY> | Specify the output directory <br /> default: release
+-p, --publish \<CREDENTIAL>... | Publish to mod portal, accepts up to two arguments for username and password
 
 
 ## Configuration
