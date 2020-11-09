@@ -35,6 +35,7 @@ struct Opts {
     /// Specify the compression method, ignored without `-z/--zip` flag
     #[structopt(
         long,
+        value_name = "METHOD",
         default_value = "stored",
         possible_values(&["stored", "bz2", "deflate"]),
         parse(from_str = compression_method),
@@ -46,15 +47,15 @@ struct Opts {
     dir: Option<String>,
 
     /// Specify the config file to use
-    #[structopt(short, long, default_value = "pactorio.toml")]
+    #[structopt(short, long, value_name = "FILE", default_value = "pactorio.toml")]
     input: String,
 
     /// Specify the output directory
-    #[structopt(short, long, default_value = "release")]
+    #[structopt(short, long, value_name = "DIRECTORY", default_value = "release")]
     output: String,
 
     /// Publish to mod portal, accepts up to two arguments for username and password
-    #[structopt(short, long, max_values = 2)]
+    #[structopt(short, long, value_name = "CREDENTIAL", max_values = 2)]
     publish: Option<Vec<String>>,
 
     /// Output a zip file instead
