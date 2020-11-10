@@ -32,6 +32,10 @@ struct Opts {
     #[structopt(short, long)]
     compact: bool,
 
+    /// Output a zip file instead
+    #[structopt(short, long)]
+    zip: bool,
+
     /// Specify the compression method, ignored without `-z/--zip` flag
     #[structopt(
         long,
@@ -57,10 +61,6 @@ struct Opts {
     /// Publish to mod portal, accepts up to two arguments for username and password
     #[structopt(short, long, value_name = "credential", max_values = 2)]
     publish: Option<Vec<String>>,
-
-    /// Output a zip file instead
-    #[structopt(short, long)]
-    zip: bool,
 }
 
 fn compression_method(compression: &str) -> CompressionMethod {
