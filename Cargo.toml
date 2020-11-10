@@ -5,11 +5,11 @@ name = "pactorio"
 version = "0.4.8"
 authors = ["figsoda <figsoda@pm.me>"]
 edition = "2018"
-license = "MPL-2.0"
 description = "Pactorio is a tool that packages factorio mods and uses toml for config files. "
+readme = "README.md"
 homepage = "https://github.com/figsoda/pactorio"
 repository = "https://github.com/figsoda/pactorio"
-readme = "README.md"
+license = "MPL-2.0"
 keywords = ["factorio", "package"]
 categories = ["command-line-utilities", "development-tools"]
 
