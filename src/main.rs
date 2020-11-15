@@ -21,7 +21,7 @@ use std::{
     env::set_current_dir,
     fs::{self, File},
     io::Cursor,
-    path::Path,
+    path::{Path, PathBuf},
 };
 
 /// Factorio mod packager https://github.com/figsoda/pactorio
@@ -48,15 +48,15 @@ struct Opts {
 
     /// Set working directory
     #[structopt(short, long, value_name = "directory")]
-    dir: Option<String>,
+    dir: Option<PathBuf>,
 
     /// Specify the config file to use
     #[structopt(short, long, value_name = "file", default_value = "pactorio.toml")]
-    input: String,
+    input: PathBuf,
 
     /// Specify the output directory
     #[structopt(short, long, value_name = "directory", default_value = "release")]
-    output: String,
+    output: PathBuf,
 
     /// Publish to mod portal, accepts up to two arguments for username and password
     #[structopt(short, long, value_name = "credential", max_values = 2)]
@@ -77,12 +77,13 @@ async fn main() -> Result<()> {
     let opts = Opts::from_args();
 
     if let Some(dir) = opts.dir {
-        set_current_dir(&dir).with_context(fail::set_dir(dir))?;
+        set_current_dir(&dir).with_context(fail::set_dir(dir.display()))?;
     }
 
-    let cfg: Config =
-        toml::from_str(&fs::read_to_string(&opts.input).with_context(fail::read(&opts.input))?)
-            .with_context(fail::parse_cfg(&opts.input))?;
+    let cfg: Config = toml::from_str(
+        &fs::read_to_string(&opts.input).with_context(fail::read(opts.input.display()))?,
+    )
+    .with_context(fail::parse_cfg(opts.input.display()))?;
 
     let mut include = GlobSetBuilder::new();
     for pat in &cfg.source.include {
@@ -131,7 +132,8 @@ async fn main() -> Result<()> {
         release::zip(files, info, &mut zip, file_name.into(), opts.compression)?;
 
         if opts.zip {
-            fs::create_dir_all(&opts.output).with_context(fail::create_dir(&opts.output))?;
+            fs::create_dir_all(&opts.output)
+                .with_context(fail::create_dir(opts.output.display()))?;
 
             let output = &Path::new(&opts.output).join(format!("{}.zip", file_name));
             release::remove_path(output)?;
@@ -200,7 +202,7 @@ async fn main() -> Result<()> {
             bail!("Failed to publish {}", mod_name);
         }
     } else if opts.zip {
-        fs::create_dir_all(&opts.output).with_context(fail::create_dir(&opts.output))?;
+        fs::create_dir_all(&opts.output).with_context(fail::create_dir(opts.output.display()))?;
 
         let output = &Path::new(&opts.output).join(format!("{}.zip", file_name));
         release::remove_path(output)?;
