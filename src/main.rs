@@ -9,11 +9,11 @@ use crate::types::{Config, Info};
 
 use anyhow::{bail, Context, Result};
 use globset::{Glob, GlobSetBuilder};
-use reqwest::Client;
 use rpassword::prompt_password_stdout;
 use rprompt::prompt_reply_stdout;
 use serde::Serialize;
 use structopt::{clap::AppSettings, StructOpt};
+use ureq::agent;
 use walkdir::WalkDir;
 use zip::CompressionMethod;
 
@@ -72,8 +72,7 @@ fn compression_method(compression: &str) -> CompressionMethod {
     }
 }
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     let opts = Opts::from_args();
 
     if let Some(dir) = opts.dir {
@@ -148,20 +147,14 @@ async fn main() -> Result<()> {
         let mod_version = &cfg.package.version;
 
         if publish::check_mod(mod_name, mod_version)
-            .await
             .with_context(fail::query_mod(mod_name, mod_version))?
         {
             bail!("{} v{} already exists", mod_name, mod_version);
         }
 
-        let client = Client::builder()
-            .cookie_store(true)
-            .build()
-            .context("Failed to create http client")?;
+        let agent = &agent();
 
-        let csrf_token = publish::get_csrf_token(&client)
-            .await
-            .context("Failed to fetch csrf token")?;
+        let csrf_token = publish::get_csrf_token(agent).context("Failed to fetch csrf token")?;
 
         let mut cred = cred.into_iter();
         let (username, password) = match cred.next() {
@@ -181,20 +174,16 @@ async fn main() -> Result<()> {
             ),
         };
 
-        publish::login(&client, csrf_token, username, password)
-            .await
+        publish::login(agent, csrf_token, username, password)
             .context("Failed to login to Factorio")?;
 
-        let upload_token = publish::get_upload_token(&client, mod_name)
-            .await
-            .context("Failed to fetch upload token")?;
+        let upload_token =
+            publish::get_upload_token(agent, mod_name).context("Failed to fetch upload token")?;
 
-        publish::update_mod(&client, mod_name, upload_token, zip.into_inner())
-            .await
+        publish::update_mod(agent, mod_name, upload_token, &zip.into_inner())
             .with_context(fail::publish(mod_name, mod_version))?;
 
         if publish::check_mod(mod_name, mod_version)
-            .await
             .with_context(fail::query_published(mod_name, mod_version))?
         {
             println!("{} v{} published successfully", mod_name, mod_version);

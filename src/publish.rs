@@ -1,23 +1,17 @@
 use crate::types::{ModQuery, ModRelease, UploadResult};
 
 use anyhow::{anyhow, bail, Result};
+use multipart::client::lazy::Multipart;
 use regex::Regex;
-use reqwest::{
-    multipart::{Form, Part},
-    Client,
-};
 use select::{document::Document, predicate::Attr};
+use ureq::Agent;
 
 use std::fmt::Display;
 
-pub async fn check_mod(
-    mod_name: impl Display,
-    mod_version: &impl PartialEq<String>,
-) -> Result<bool> {
-    match reqwest::get(&format!("https://mods.factorio.com/api/mods/{}", mod_name))
-        .await?
-        .json()
-        .await?
+pub fn check_mod(mod_name: impl Display, mod_version: &impl PartialEq<String>) -> Result<bool> {
+    match ureq::get(&format!("https://mods.factorio.com/api/mods/{}", mod_name))
+        .call()
+        .into_json_deserialize()?
     {
         ModQuery::Err { message } => bail!(message),
         ModQuery::Mod { releases } => {
@@ -32,13 +26,11 @@ pub async fn check_mod(
     Ok(false)
 }
 
-pub async fn get_csrf_token(client: &Client) -> Result<String> {
-    let doc: Document = client
+pub fn get_csrf_token(agent: &Agent) -> Result<String> {
+    let doc: Document = agent
         .get("https://factorio.com/login?mods=1")
-        .send()
-        .await?
-        .text()
-        .await?
+        .call()
+        .into_string()?
         .as_str()
         .into();
 
@@ -53,76 +45,68 @@ pub async fn get_csrf_token(client: &Client) -> Result<String> {
     Ok(csrf_token)
 }
 
-pub async fn login(
-    client: &Client,
-    csrf_token: String,
-    username: String,
-    password: String,
-) -> Result<()> {
-    client
+pub fn login(agent: &Agent, csrf_token: String, username: String, password: String) -> Result<()> {
+    agent
         .post("https://factorio.com/login?mods=1")
-        .header("referer", "https://factorio.com/login")
-        .form(&[
+        .set("referer", "https://factorio.com/login")
+        .send_form(&[
             ("csrf_token", &csrf_token),
             ("username_or_email", &username),
             ("password", &password),
         ])
-        .send()
-        .await?;
-
-    Ok(())
+        .into_synthetic_error()
+        .map_or(Ok(()), |e| Err(e.into()))
 }
 
-pub async fn get_upload_token(client: &Client, mod_name: impl Display) -> Result<String> {
+pub fn get_upload_token(agent: &Agent, mod_name: impl Display) -> Result<String> {
     let upload_token = Regex::new("token: '(.*)'")?
         .captures(
-            &client
+            &agent
                 .get(&format!(
                     "https://mods.factorio.com/mod/{}/downloads/edit",
                     mod_name,
                 ))
-                .send()
-                .await?
-                .text()
-                .await?,
+                .call()
+                .into_string()?,
         )
         .ok_or_else(|| anyhow!("Cannot find a match with regex"))?[1]
         .into();
     Ok(upload_token)
 }
 
-pub async fn update_mod(
-    client: &Client,
+pub fn update_mod(
+    agent: &Agent,
     mod_name: impl Display,
     upload_token: impl Display,
-    file: Vec<u8>,
+    file: &[u8],
 ) -> Result<()> {
     let file_size = file.len();
-    let res = client
+    let parts = Multipart::new()
+        .add_stream(
+            "file",
+            file,
+            Some(format!("{}.zip", mod_name)),
+            Some("application/x-zip-compressed".parse()?),
+        )
+        .prepare()?;
+    let res = agent
         .post(&format!(
             "https://direct.mods-data.factorio.com/upload/mod/{}",
             upload_token
         ))
-        .multipart(
-            Form::new().part(
-                "file",
-                Part::bytes(file)
-                    .file_name(format!("{}.zip", mod_name))
-                    .mime_str("application/x-zip-compressed")?,
-            ),
+        .set(
+            "Content-Type",
+            &format!("multipart/form-data; boundary={}", parts.boundary()),
         )
-        .send()
-        .await?
-        .json()
-        .await?;
-    client
+        .send(parts)
+        .into_json_deserialize()?;
+    agent
         .post(&format!(
             "https://mods.factorio.com/mod/{}/downloads/edit",
             mod_name,
         ))
-        .form(&UploadResult { file_size, ..res })
-        .send()
-        .await?;
-
-    Ok(())
+        .set("Content-Type", "application/x-www-form-urlencoded")
+        .send(serde_urlencoded::to_string(UploadResult { file_size, ..res })?.as_bytes())
+        .into_synthetic_error()
+        .map_or(Ok(()), |e| Err(e.into()))
 }
