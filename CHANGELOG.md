@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v0.5.0 - 2020-11-19
+
+### Changes
+- Print information to stderr instead of stdout
+
+### Optimization
+- Reduce size of binary
+
+
 ## v0.4.8 - 2020-11-05
 
 ### Features
