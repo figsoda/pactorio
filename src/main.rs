@@ -9,8 +9,8 @@ use crate::types::{Config, Info};
 
 use anyhow::{bail, Context, Result};
 use globset::{Glob, GlobSetBuilder};
-use rpassword::prompt_password_stdout;
-use rprompt::prompt_reply_stdout;
+use rpassword::prompt_password_stderr;
+use rprompt::prompt_reply_stderr;
 use serde::Serialize;
 use structopt::{clap::AppSettings, StructOpt};
 use ureq::agent;
@@ -162,14 +162,14 @@ fn main() -> Result<()> {
                 username,
                 match cred.next() {
                     Some(password) => password,
-                    None => prompt_password_stdout("Factorio password: ")
+                    None => prompt_password_stderr("Factorio password: ")
                         .context("Failed to prompt for password")?,
                 },
             ),
             None => (
-                prompt_reply_stdout("Factorio username: ")
+                prompt_reply_stderr("Factorio username: ")
                     .context("Failed to prompt for username")?,
-                prompt_password_stdout("Factorio password: ")
+                prompt_password_stderr("Factorio password: ")
                     .context("Failed to prompt for password")?,
             ),
         };
@@ -186,7 +186,7 @@ fn main() -> Result<()> {
         if publish::check_mod(mod_name, mod_version)
             .with_context(fail::query_published(mod_name, mod_version))?
         {
-            println!("{} v{} published successfully", mod_name, mod_version);
+            eprintln!("{} v{} published successfully", mod_name, mod_version);
         } else {
             bail!("Failed to publish {}", mod_name);
         }
