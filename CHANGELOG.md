@@ -10,7 +10,7 @@
 ## v0.4.7 - 2020-10-27
 
 ### Fixes
-- Fix incompatibility due to tokio crate
+- Fixed incompatibility due to tokio crate
 
 
 ## v0.4.6 - 2020-10-18
