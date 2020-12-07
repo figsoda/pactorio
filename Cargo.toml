@@ -30,7 +30,7 @@ ureq = { version = "1.5.4", features = ["json"] }
 walkdir = "2.3.1"
 
 [dependencies.zip]
-version = "0.5.8"
+version = "0.5.9"
 default-features = false
 features = ["bzip2", "deflate"]
 
