@@ -14,7 +14,7 @@ keywords = ["factorio", "package"]
 categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
-anyhow = "1.0.35"
+anyhow = "1.0.36"
 globset = "0.4.6"
 multipart = { version = "0.17.0", default-features = false, features = ["client"] }
 regex = "1.4.2"
