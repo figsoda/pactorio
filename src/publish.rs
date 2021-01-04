@@ -10,8 +10,8 @@ use std::fmt::Display;
 
 pub fn check_mod(mod_name: impl Display, mod_version: &impl PartialEq<String>) -> Result<bool> {
     match ureq::get(&format!("https://mods.factorio.com/api/mods/{}", mod_name))
-        .call()
-        .into_json_deserialize()?
+        .call()?
+        .into_json()?
     {
         ModQuery::Err { message } => bail!(message),
         ModQuery::Mod { releases } => {
@@ -29,7 +29,7 @@ pub fn check_mod(mod_name: impl Display, mod_version: &impl PartialEq<String>) -
 pub fn get_csrf_token(agent: &Agent) -> Result<String> {
     let doc: Document = agent
         .get("https://factorio.com/login?mods=1")
-        .call()
+        .call()?
         .into_string()?
         .as_str()
         .into();
@@ -53,9 +53,9 @@ pub fn login(agent: &Agent, csrf_token: String, username: String, password: Stri
             ("csrf_token", &csrf_token),
             ("username_or_email", &username),
             ("password", &password),
-        ])
-        .into_synthetic_error()
-        .map_or(Ok(()), |e| Err(e.into()))
+        ])?;
+
+    Ok(())
 }
 
 pub fn get_upload_token(agent: &Agent, mod_name: impl Display) -> Result<String> {
@@ -66,7 +66,7 @@ pub fn get_upload_token(agent: &Agent, mod_name: impl Display) -> Result<String>
                     "https://mods.factorio.com/mod/{}/downloads/edit",
                     mod_name,
                 ))
-                .call()
+                .call()?
                 .into_string()?,
         )
         .ok_or_else(|| anyhow!("Cannot find a match with regex"))?[1]
@@ -98,15 +98,15 @@ pub fn update_mod(
             "Content-Type",
             &format!("multipart/form-data; boundary={}", parts.boundary()),
         )
-        .send(parts)
-        .into_json_deserialize()?;
+        .send(parts)?
+        .into_json()?;
     agent
         .post(&format!(
             "https://mods.factorio.com/mod/{}/downloads/edit",
             mod_name,
         ))
         .set("Content-Type", "application/x-www-form-urlencoded")
-        .send(serde_urlencoded::to_string(UploadResult { file_size, ..res })?.as_bytes())
-        .into_synthetic_error()
-        .map_or(Ok(()), |e| Err(e.into()))
+        .send(serde_urlencoded::to_string(UploadResult { file_size, ..res })?.as_bytes())?;
+
+    Ok(())
 }
