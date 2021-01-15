@@ -56,7 +56,7 @@
 - `pactorio -pz` now outputs a zip in addition to publishing to mod portal
 
 ### Documentation
-- Configuration instructions in [README.md](https://github.com/figsoda/pactorio/blob/main/README.md)
+- Configuration instructions in [README.md](README.md)
 
 
 ## v0.4.1 - 2020-09-08
