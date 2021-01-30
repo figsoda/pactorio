@@ -63,6 +63,8 @@ jobs:
           use-cross: ${{ matrix.use-cross }}
           command: build
           args: --release --target ${{ matrix.target }}
+        env:
+          RUSTFLAGS: -Z strip=symbols
 
       - name: Upload release asset
         uses: actions/upload-release-asset@v1
