@@ -8,11 +8,11 @@ mod types;
 use crate::types::{Config, Info};
 
 use anyhow::{bail, Context, Result};
+use clap::{AppSettings, Clap};
 use globset::{Glob, GlobSetBuilder};
 use rpassword::prompt_password_stderr;
 use rprompt::prompt_reply_stderr;
 use serde::Serialize;
-use structopt::{clap::AppSettings, StructOpt};
 use ureq::agent;
 use walkdir::WalkDir;
 use zip::CompressionMethod;
@@ -25,19 +25,19 @@ use std::{
 };
 
 /// Factorio mod packager https://github.com/figsoda/pactorio
-#[derive(StructOpt)]
-#[structopt(name = "pactorio", global_setting = AppSettings::ColoredHelp)]
+#[derive(Clap)]
+#[clap(global_setting = AppSettings::ColoredHelp)]
 struct Opts {
     /// Output info.json compactly
-    #[structopt(short, long)]
+    #[clap(short, long)]
     compact: bool,
 
     /// Output a zip file instead
-    #[structopt(short, long)]
+    #[clap(short, long)]
     zip: bool,
 
     /// Specify the compression method, ignored without `-z/--zip` flag
-    #[structopt(
+    #[clap(
         long,
         value_name = "method",
         default_value = "stored",
@@ -47,19 +47,19 @@ struct Opts {
     compression: CompressionMethod,
 
     /// Set working directory
-    #[structopt(short, long, value_name = "directory")]
+    #[clap(short, long, value_name = "directory")]
     dir: Option<PathBuf>,
 
     /// Specify the config file to use
-    #[structopt(short, long, value_name = "file", default_value = "pactorio.toml")]
+    #[clap(short, long, value_name = "file", default_value = "pactorio.toml")]
     input: PathBuf,
 
     /// Specify the output directory
-    #[structopt(short, long, value_name = "directory", default_value = "release")]
+    #[clap(short, long, value_name = "directory", default_value = "release")]
     output: PathBuf,
 
     /// Publish to mod portal, accepts up to two arguments for username and password
-    #[structopt(short, long, value_name = "credential", max_values = 2)]
+    #[clap(short, long, value_name = "credential", max_values = 2)]
     publish: Option<Vec<String>>,
 }
 
@@ -73,7 +73,7 @@ fn compression_method(compression: &str) -> CompressionMethod {
 }
 
 fn main() -> Result<()> {
-    let opts = Opts::from_args();
+    let opts = Opts::parse();
 
     if let Some(dir) = opts.dir {
         set_current_dir(&dir).with_context(fail::set_dir(dir.display()))?;
