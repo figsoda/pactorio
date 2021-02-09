@@ -26,7 +26,7 @@ use std::{
 
 /// Factorio mod packager https://github.com/figsoda/pactorio
 #[derive(Clap)]
-#[clap(global_setting = AppSettings::ColoredHelp)]
+#[clap(version, global_setting = AppSettings::ColoredHelp)]
 struct Opts {
     /// Output info.json compactly
     #[clap(short, long)]
