@@ -101,7 +101,7 @@ jobs:
 
       - name: Find generated completions
         run: |
-          outputs=(target/debug/build/mmtc-*/out/completions)
+          outputs=(target/debug/build/pactorio-*/out/completions)
           cp -r "${outputs[0]}" completions
 
       - name: Upload bash completion
@@ -110,8 +110,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/mmtc.bash
-          asset_name: mmtc.bash
+          asset_path: ./completions/pactorio.bash
+          asset_name: pactorio.bash
           asset_content_type: text/plain
 
       - name: Upload elvish completion
@@ -120,8 +120,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/mmtc.elv
-          asset_name: mmtc.elv
+          asset_path: ./completions/pactorio.elv
+          asset_name: pactorio.elv
           asset_content_type: text/plain
 
       - name: Upload fish completion
@@ -130,8 +130,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/mmtc.fish
-          asset_name: mmtc.fish
+          asset_path: ./completions/pactorio.fish
+          asset_name: pactorio.fish
           asset_content_type: text/plain
 
       - name: Upload powershell completion
@@ -140,8 +140,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/_mmtc.ps1
-          asset_name: mmtc.ps1
+          asset_path: ./completions/_pactorio.ps1
+          asset_name: pactorio.ps1
           asset_content_type: text/plain
 
       - name: Upload zsh completion
@@ -150,6 +150,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/_mmtc
-          asset_name: mmtc.zsh
+          asset_path: ./completions/_pactorio
+          asset_name: pactorio.zsh
           asset_content_type: text/plain
