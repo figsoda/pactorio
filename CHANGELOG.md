@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.1 - 2021-02-25
+
+### Features
+- Completions for bash, elvish, fish, powershell, and zsh
+
 
 ## v0.5.0 - 2020-11-19
 
