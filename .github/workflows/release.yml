@@ -55,7 +55,7 @@ jobs:
           profile: minimal
           toolchain: nightly
           target: ${{ matrix.target }}
-          override: true
+          default: true
 
       - name: Cargo build
         uses: actions-rs/cargo@v1
@@ -90,7 +90,7 @@ jobs:
         with:
           profile: minimal
           toolchain: nightly
-          override: true
+          default: true
 
       - name: Cargo build
         uses: actions-rs/cargo@v1

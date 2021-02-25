@@ -31,7 +31,7 @@ jobs:
           profile: minimal
           toolchain: stable
           target: ${{ matrix.target }}
-          override: true
+          default: true
 
       - name: Cargo build
         uses: actions-rs/cargo@v1
@@ -55,7 +55,7 @@ jobs:
           profile: minimal
           toolchain: stable
           components: clippy
-          override: true
+          default: true
 
       - name: Cargo clippy
         uses: actions-rs/cargo@v1
@@ -76,7 +76,7 @@ jobs:
           profile: minimal
           toolchain: nightly
           components: rustfmt
-          override: true
+          default: true
 
       - name: Cargo fmt
         uses: actions-rs/cargo@v1
