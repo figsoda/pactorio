@@ -39,6 +39,8 @@ jobs:
           use-cross: ${{ matrix.use-cross }}
           command: build
           args: --target ${{ matrix.target }}
+        env:
+          GEN_COMPLETIONS: 1
 
   clippy:
     name: clippy
