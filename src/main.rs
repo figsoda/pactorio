@@ -1,76 +1,31 @@
 #![forbid(unsafe_code)]
 
+mod cli;
 mod fail;
 mod publish;
 mod release;
 mod types;
 
-use crate::types::{Config, Info};
+use crate::{
+    cli::Opts,
+    types::{Config, Info},
+};
 
 use anyhow::{bail, Context, Result};
-use clap::{AppSettings, Clap};
+use clap::Clap;
 use globset::{Glob, GlobSetBuilder};
 use rpassword::prompt_password_stderr;
 use rprompt::prompt_reply_stderr;
 use serde::Serialize;
 use ureq::agent;
 use walkdir::WalkDir;
-use zip::CompressionMethod;
 
 use std::{
     env::set_current_dir,
     fs::{self, File},
     io::Cursor,
-    path::{Path, PathBuf},
+    path::Path,
 };
-
-/// Factorio mod packager https://github.com/figsoda/pactorio
-#[derive(Clap)]
-#[clap(version, global_setting = AppSettings::ColoredHelp)]
-struct Opts {
-    /// Output info.json compactly
-    #[clap(short, long)]
-    compact: bool,
-
-    /// Output a zip file instead
-    #[clap(short, long)]
-    zip: bool,
-
-    /// Specify the compression method, ignored without `-z/--zip` flag
-    #[clap(
-        long,
-        value_name = "method",
-        default_value = "stored",
-        possible_values(&["stored", "bz2", "deflate"]),
-        parse(from_str = compression_method),
-    )]
-    compression: CompressionMethod,
-
-    /// Set working directory
-    #[clap(short, long, value_name = "directory")]
-    dir: Option<PathBuf>,
-
-    /// Specify the config file to use
-    #[clap(short, long, value_name = "file", default_value = "pactorio.toml")]
-    input: PathBuf,
-
-    /// Specify the output directory
-    #[clap(short, long, value_name = "directory", default_value = "release")]
-    output: PathBuf,
-
-    /// Publish to mod portal, accepts up to two arguments for username and password
-    #[clap(short, long, value_name = "credential", max_values = 2)]
-    publish: Option<Vec<String>>,
-}
-
-fn compression_method(compression: &str) -> CompressionMethod {
-    match compression {
-        "stored" => CompressionMethod::Stored,
-        "bz2" => CompressionMethod::Bzip2,
-        "deflate" => CompressionMethod::Deflated,
-        _ => unreachable!(),
-    }
-}
 
 fn main() -> Result<()> {
     let opts = Opts::parse();
