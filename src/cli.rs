@@ -3,7 +3,9 @@ use zip::CompressionMethod;
 
 use std::path::PathBuf;
 
-/// Factorio mod packager https://github.com/figsoda/pactorio
+/// Mod packager for Factorio
+///
+/// Homepage: https://github.com/figsoda/pactorio
 #[derive(Clap)]
 #[clap(bin_name = "pactorio", version, global_setting = AppSettings::ColoredHelp)]
 pub struct Opts {
