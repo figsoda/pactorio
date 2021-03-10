@@ -11,6 +11,8 @@ Mod packager for [Factorio](https://factorio.com)
 
 ## Installation
 
+[![repology](https://repology.org/badge/vertical-allrepos/pactorio.svg)](https://repology.org/project/pactorio/versions)
+
 The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest).
 
 Alternatively you can install pactorio from [crates.io][Crate] with cargo.
