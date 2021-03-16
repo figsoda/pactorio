@@ -1,7 +1,7 @@
 # Pactorio
 
 [![release](https://img.shields.io/github/v/release/figsoda/pactorio?logo=github&style=flat-square)](https://github.com/figsoda/pactorio/releases)
-[![version](https://img.shields.io/crates/v/pactorio?logo=rust&style=flat-square)][Crate]
+[![version](https://img.shields.io/crates/v/pactorio?logo=rust&style=flat-square)][crate]
 [![dependencies](https://img.shields.io/librariesio/release/cargo/pactorio?style=flat-square)](https://libraries.io/cargo/pactorio)
 [![license](https://img.shields.io/badge/license-MPL--2.0-blue?style=flat-square)](https://www.mozilla.org/en-US/MPL/2.0)
 [![ci](https://img.shields.io/github/workflow/status/figsoda/pactorio/ci?label=ci&logo=github-actions&style=flat-square)](https://github.com/figsoda/pactorio/actions?query=workflow:ci)
@@ -15,7 +15,7 @@ Mod packager for [Factorio](https://factorio.com)
 
 The latest precompiled binaries are available on [github](https://github.com/figsoda/pactorio/releases/latest).
 
-Alternatively you can install pactorio from [crates.io][Crate] with cargo.
+Alternatively you can install pactorio from [crates.io][crate] with cargo.
 
 ```sh
 cargo install pactorio
@@ -150,4 +150,4 @@ ignore = []
 See [CHANGELOG.md](CHANGELOG.md)
 
 
-[Crate]: https://crates.io/crates/pactorio
+[crate]: https://crates.io/crates/pactorio
