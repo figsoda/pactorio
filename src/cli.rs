@@ -22,7 +22,7 @@ pub struct Opts {
         long,
         value_name = "method",
         default_value = "stored",
-        possible_values(&["stored", "bz2", "deflate"]),
+        possible_values = &["stored", "bz2", "deflate"],
         parse(from_str = compression_method),
     )]
     pub compression: CompressionMethod,
