@@ -7,7 +7,11 @@ use std::path::PathBuf;
 ///
 /// Homepage: https://github.com/figsoda/pactorio
 #[derive(Clap)]
-#[clap(bin_name = "pactorio", version, global_setting = AppSettings::ColoredHelp)]
+#[clap(
+    bin_name = "pactorio",
+    version,
+    global_setting = AppSettings::ColoredHelp,
+)]
 pub struct Opts {
     /// Output info.json compactly
     #[clap(short, long)]
