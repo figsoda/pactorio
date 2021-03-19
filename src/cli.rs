@@ -44,7 +44,7 @@ pub struct Opts {
     pub publish: Option<Vec<String>>,
 }
 
-pub fn compression_method(compression: &str) -> CompressionMethod {
+fn compression_method(compression: &str) -> CompressionMethod {
     match compression {
         "stored" => CompressionMethod::Stored,
         "bz2" => CompressionMethod::Bzip2,
