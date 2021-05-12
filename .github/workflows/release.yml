@@ -67,7 +67,7 @@ jobs:
           RUSTFLAGS: -Z strip=symbols
 
       - name: Upload release asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -105,7 +105,7 @@ jobs:
           cp -r "${outputs[0]}" completions
 
       - name: Upload bash completion
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -115,7 +115,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Upload elvish completion
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -125,7 +125,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Upload fish completion
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -135,7 +135,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Upload powershell completion
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -145,7 +145,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Upload zsh completion
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
