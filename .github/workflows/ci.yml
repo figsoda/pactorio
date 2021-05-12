@@ -34,7 +34,7 @@ jobs:
           default: true
 
       - name: Cargo build
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         with:
           use-cross: ${{ matrix.use-cross }}
           command: build
@@ -58,7 +58,7 @@ jobs:
           default: true
 
       - name: Cargo clippy
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         with:
           command: clippy
           args: -- -D warnings
@@ -79,7 +79,7 @@ jobs:
           default: true
 
       - name: Cargo fmt
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         with:
           command: fmt
           args: -- --check
