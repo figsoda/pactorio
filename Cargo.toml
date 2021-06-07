@@ -28,14 +28,14 @@ ureq = { version = "2.1.1", features = ["json"] }
 walkdir = "2.3.2"
 
 [dependencies.zip]
-version = "0.5.12"
+version = "0.5.13"
 default-features = false
 features = ["bzip2", "deflate"]
 
 [build-dependencies]
 clap = "3.0.0-beta.2"
 clap_generate = "3.0.0-beta.2"
-zip = { version = "0.5.12", default-features = false }
+zip = { version = "0.5.13", default-features = false }
 
 [profile.release]
 lto = true
