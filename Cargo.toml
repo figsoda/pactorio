@@ -12,7 +12,7 @@ keywords = ["factorio", "package"]
 categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
-anyhow = "1.0.40"
+anyhow = "1.0.41"
 clap = "3.0.0-beta.2"
 globset = "0.4.6"
 multipart = { version = "0.18.0", default-features = false, features = ["client"] }
