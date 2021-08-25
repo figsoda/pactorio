@@ -9,20 +9,11 @@ jobs:
   create_release:
     name: create_release
     runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Create release
-        id: create_release
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Pactorio ${{ github.ref }}
           body: "[Changelog](https://github.com/figsoda/pactorio/blob/main/CHANGELOG.md)"
-          draft: false
-          prerelease: false
 
   release:
     name: release
@@ -60,21 +51,18 @@ jobs:
       - name: Cargo build
         uses: actions-rs/cargo@v1.0.3
         with:
-          use-cross: ${{ matrix.use-cross }}
           command: build
           args: --release --target ${{ matrix.target }}
         env:
           RUSTFLAGS: -Z strip=symbols
 
       - name: Upload release asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./target/${{ matrix.target }}/release/pactorio${{ matrix.ext }}
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file: target/${{ matrix.target }}/release/pactorio${{ matrix.ext }}
           asset_name: pactorio-${{ matrix.target }}${{ matrix.ext }}
-          asset_content_type: application/octet-stream
 
   completions:
     name: completions
@@ -105,51 +93,38 @@ jobs:
           cp -r "${outputs[0]}" completions
 
       - name: Upload bash completion
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/pactorio.bash
-          asset_name: pactorio.bash
-          asset_content_type: text/plain
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file: ./completions/pactorio.bash
 
       - name: Upload elvish completion
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/pactorio.elv
-          asset_name: pactorio.elv
-          asset_content_type: text/plain
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file: ./completions/pactorio.elv
 
       - name: Upload fish completion
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/pactorio.fish
-          asset_name: pactorio.fish
-          asset_content_type: text/plain
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file: ./completions/pactorio.fish
 
       - name: Upload powershell completion
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/_pactorio.ps1
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file: ./completions/_pactorio.ps1
           asset_name: pactorio.ps1
-          asset_content_type: text/plain
 
       - name: Upload zsh completion
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./completions/_pactorio
+          repo_token: ${{ github.token }}
+          tag: ${{ github.ref }}
+          file: ./completions/_pactorio
           asset_name: pactorio.zsh
-          asset_content_type: text/plain
