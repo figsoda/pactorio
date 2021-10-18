@@ -1,4 +1,4 @@
-use clap::{AppSettings, Clap};
+use clap::Parser;
 use zip::CompressionMethod;
 
 use std::path::PathBuf;
@@ -6,12 +6,8 @@ use std::path::PathBuf;
 /// Mod packager for Factorio
 ///
 /// Homepage: https://github.com/figsoda/pactorio
-#[derive(Clap)]
-#[clap(
-    bin_name = "pactorio",
-    version,
-    global_setting = AppSettings::ColoredHelp,
-)]
+#[derive(Parser)]
+#[clap(version)]
 pub struct Opts {
     /// Output info.json compactly
     #[clap(short, long)]

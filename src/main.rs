@@ -12,7 +12,7 @@ use crate::{
 };
 
 use anyhow::{bail, Context, Result};
-use clap::Clap;
+use clap::Parser;
 use globset::{Glob, GlobSetBuilder};
 use rpassword::prompt_password_stderr;
 use rprompt::prompt_reply_stderr;
