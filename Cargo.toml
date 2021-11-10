@@ -24,7 +24,7 @@ serde = { version = "1.0.130", features = ["derive"] }
 serde_json = "1.0.69"
 serde_urlencoded = "0.7.0"
 toml = "0.5.8"
-ureq = { version = "2.3.0", features = ["json"] }
+ureq = { version = "2.3.0", features = ["cookies", "json"] }
 walkdir = "2.3.2"
 
 [dependencies.zip]
