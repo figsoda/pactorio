@@ -3,7 +3,6 @@ use crate::types::{ModQuery, ModRelease, UploadResult};
 use anyhow::{anyhow, bail, Result};
 use multipart::client::lazy::Multipart;
 use regex::Regex;
-use select::{document::Document, predicate::Attr};
 use ureq::Agent;
 
 use std::fmt::Display;
@@ -27,28 +26,21 @@ pub fn check_mod(mod_name: impl Display, mod_version: &impl PartialEq<String>) -
 }
 
 pub fn get_csrf_token(agent: &Agent) -> Result<String> {
-    let doc: Document = agent
-        .get("https://factorio.com/login?mods=1")
-        .call()?
-        .into_string()?
-        .as_str()
-        .into();
-
-    let csrf_token = doc
-        .find(Attr("id", "csrf_token"))
-        .next()
-        .ok_or_else(|| anyhow!("Cannot find node with id=\"csrf_token\""))?
-        .attr("value")
-        .ok_or_else(|| anyhow!("Node does not contain attribute named \"value\""))?
-        .into();
-
-    Ok(csrf_token)
+    Ok(Regex::new(r#"csrf_token.*value="([^"]+)""#)?
+        .captures(
+            &agent
+                .get("https://factorio.com/login?mods=1")
+                .call()?
+                .into_string()?,
+        )
+        .ok_or_else(|| anyhow!("Cannot find csrf token"))?[1]
+        .into())
 }
 
 pub fn login(agent: &Agent, csrf_token: String, username: String, password: String) -> Result<()> {
     agent
-        .post("https://factorio.com/login?mods=1")
-        .set("referer", "https://factorio.com/login")
+        .post("https://factorio.com/login")
+        .set("referer", "https://factorio.com/login?mods=1")
         .send_form(&[
             ("csrf_token", &csrf_token),
             ("username_or_email", &username),
