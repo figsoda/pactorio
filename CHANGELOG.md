@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.5.2 - 2021-11-10
+
+### Fixes
+- Don't make regular files executable in zip files
+
+### Optimization
+- Performance improvements
+
+
 ## v0.5.1 - 2021-02-25
 
 ### Features

@@ -1,6 +1,6 @@
 [package]
 name = "pactorio"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["figsoda <figsoda@pm.me>"]
 edition = "2018"
 description = "Mod packager for Factorio"
