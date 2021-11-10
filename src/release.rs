@@ -1,4 +1,5 @@
 use anyhow::{anyhow, Context, Result};
+use is_executable::IsExecutable;
 use zip::{write::FileOptions, CompressionMethod, ZipWriter};
 
 use crate::fail;
@@ -47,21 +48,27 @@ pub fn zip(
     let mut zip = ZipWriter::new(writer);
     zip.set_comment("");
 
-    let fo = FileOptions::default()
-        .compression_method(compression)
-        .unix_permissions(0o755);
+    let regular = FileOptions::default().compression_method(compression);
+    let executable = regular.unix_permissions(0o755);
 
     for (from, to) in files {
         let to = root.join(to);
         if from.is_file() {
             let mut file = File::open(&from).with_context(fail::read(from.display()))?;
-            zip.start_file(to.to_string_lossy(), fo)
-                .context("Failed to write to the zip file")?;
+            zip.start_file(
+                to.to_string_lossy(),
+                if from.is_executable() {
+                    executable
+                } else {
+                    regular
+                },
+            )
+            .context("Failed to write to the zip file")?;
             io::copy(&mut file, &mut zip).context("Failed to write to the zip file")?;
         }
     }
 
-    zip.start_file(root.join("info.json").to_string_lossy(), fo)
+    zip.start_file(root.join("info.json").to_string_lossy(), regular)
         .context("Failed to write to the zip file")?;
     zip.write_all(&info)
         .context("Failed to write to the zip file")?;

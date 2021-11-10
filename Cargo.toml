@@ -15,6 +15,7 @@ categories = ["command-line-utilities", "development-tools"]
 anyhow = "1.0.45"
 clap = "3.0.0-beta.5"
 globset = "0.4.8"
+is_executable = "1.0.1"
 multipart = { version = "0.18.0", default-features = false, features = ["client"] }
 regex = "1.5.4"
 rpassword = "5.0.1"
