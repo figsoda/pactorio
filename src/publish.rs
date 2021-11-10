@@ -5,9 +5,7 @@ use multipart::client::lazy::Multipart;
 use regex::Regex;
 use ureq::Agent;
 
-use std::fmt::Display;
-
-pub fn check_mod(mod_name: impl Display, mod_version: &impl PartialEq<String>) -> Result<bool> {
+pub fn check_mod(mod_name: &str, mod_version: &str) -> Result<bool> {
     match ureq::get(&format!("https://mods.factorio.com/api/mods/{}", mod_name))
         .call()?
         .into_json()?
@@ -15,7 +13,7 @@ pub fn check_mod(mod_name: impl Display, mod_version: &impl PartialEq<String>) -
         ModQuery::Err { message } => bail!(message),
         ModQuery::Mod { releases } => {
             for ModRelease { version } in releases {
-                if mod_version == &version {
+                if mod_version == version {
                     return Ok(true);
                 }
             }
@@ -50,7 +48,7 @@ pub fn login(agent: &Agent, csrf_token: String, username: String, password: Stri
     Ok(())
 }
 
-pub fn get_upload_token(agent: &Agent, mod_name: impl Display) -> Result<String> {
+pub fn get_upload_token(agent: &Agent, mod_name: &str) -> Result<String> {
     let upload_token = Regex::new("token: '(.*)'")?
         .captures(
             &agent
@@ -66,12 +64,7 @@ pub fn get_upload_token(agent: &Agent, mod_name: impl Display) -> Result<String>
     Ok(upload_token)
 }
 
-pub fn update_mod(
-    agent: &Agent,
-    mod_name: impl Display,
-    upload_token: impl Display,
-    file: &[u8],
-) -> Result<()> {
+pub fn update_mod(agent: &Agent, mod_name: &str, upload_token: String, file: &[u8]) -> Result<()> {
     let file_size = file.len();
     let parts = Multipart::new()
         .add_stream(
