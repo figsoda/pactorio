@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use std::{collections::HashMap, default::Default};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Deps {
     #[serde(default)]
     required: HashMap<String, String>,
@@ -15,7 +15,7 @@ pub struct Deps {
     hidden: HashMap<String, String>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Package {
     pub name: String,
     pub version: String,
@@ -27,7 +27,7 @@ pub struct Package {
     pub factorio_version: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Source {
     #[serde(alias = "directory")]
     #[serde(default = "default_source_dir")]
@@ -56,7 +56,7 @@ impl Default for Source {
     }
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Config {
     pub package: Package,
     #[serde(alias = "dependencies")]
@@ -65,7 +65,7 @@ pub struct Config {
     pub source: Source,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Serialize)]
 pub struct Info {
     pub name: String,
     pub version: String,
@@ -119,7 +119,7 @@ impl From<Config> for Info {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct UploadResult {
     pub changelog: Option<String>,
     pub filename: String,
@@ -130,12 +130,12 @@ pub struct UploadResult {
     pub thumbnail: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct ModRelease {
     pub version: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(untagged)]
 pub enum ModQuery {
     Err { message: String },
