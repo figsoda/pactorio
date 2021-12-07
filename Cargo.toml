@@ -2,7 +2,7 @@
 name = "pactorio"
 version = "0.5.2"
 authors = ["figsoda <figsoda@pm.me>"]
-edition = "2018"
+edition = "2021"
 description = "Mod packager for Factorio"
 readme = "README.md"
 homepage = "https://github.com/figsoda/pactorio"
@@ -35,7 +35,11 @@ features = ["bzip2", "deflate"]
 [build-dependencies]
 clap = "3.0.0-beta.5"
 clap_generate = "3.0.0-beta.5"
-zip = { version = "0.5.13", default-features = false }
+
+[build-dependencies.zip]
+version = "0.5.13"
+default-features = false
+features = ["bzip2", "deflate"]
 
 [profile.release]
 lto = true
