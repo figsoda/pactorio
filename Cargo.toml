@@ -28,7 +28,7 @@ ureq = { version = "2.4.0", features = ["cookies", "json"] }
 walkdir = "2.3.2"
 
 [dependencies.zip]
-version = "0.5.13"
+version = "0.6.2"
 default-features = false
 features = ["bzip2", "deflate"]
 
@@ -37,7 +37,7 @@ clap = { version = "3.0.10", features = ["derive"] }
 clap_complete = "3.0.4"
 
 [build-dependencies.zip]
-version = "0.5.13"
+version = "0.6.2"
 default-features = false
 features = ["bzip2", "deflate"]
 
