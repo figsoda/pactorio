@@ -14,7 +14,7 @@ use crate::{
 use anyhow::{bail, Context, Result};
 use clap::Parser;
 use globset::{Glob, GlobSetBuilder};
-use rpassword::prompt_password_stderr;
+use rpassword::prompt_password;
 use rprompt::prompt_reply_stderr;
 use serde::Serialize;
 use ureq::agent;
@@ -117,14 +117,14 @@ fn main() -> Result<()> {
                 username,
                 match cred.next() {
                     Some(password) => password,
-                    None => prompt_password_stderr("Factorio password: ")
+                    None => prompt_password("Factorio password: ")
                         .context("Failed to prompt for password")?,
                 },
             ),
             None => (
                 prompt_reply_stderr("Factorio username: ")
                     .context("Failed to prompt for username")?,
-                prompt_password_stderr("Factorio password: ")
+                prompt_password("Factorio password: ")
                     .context("Failed to prompt for password")?,
             ),
         };

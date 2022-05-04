@@ -40,7 +40,7 @@ pub struct Opts {
     pub output: PathBuf,
 
     /// Publish to mod portal, accepts up to two arguments for username and password
-    #[clap(short, long, value_name = "credential", max_values = 2)]
+    #[clap(short, long, value_name = "credential", min_values = 0, max_values = 2)]
     pub publish: Option<Vec<String>>,
 }
 
