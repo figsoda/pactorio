@@ -124,8 +124,7 @@ fn main() -> Result<()> {
             None => (
                 prompt_reply_stderr("Factorio username: ")
                     .context("Failed to prompt for username")?,
-                prompt_password("Factorio password: ")
-                    .context("Failed to prompt for password")?,
+                prompt_password("Factorio password: ").context("Failed to prompt for password")?,
             ),
         };
 
