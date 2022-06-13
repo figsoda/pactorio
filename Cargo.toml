@@ -34,7 +34,7 @@ features = ["bzip2", "deflate"]
 
 [build-dependencies]
 clap = { version = "3.1.18", features = ["derive"] }
-clap_complete = "3.1.4"
+clap_complete = "3.2.0"
 
 [build-dependencies.zip]
 version = "0.6.2"
