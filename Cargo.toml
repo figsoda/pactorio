@@ -14,7 +14,7 @@ categories = ["command-line-utilities", "development-tools"]
 [dependencies]
 anyhow = "1.0.57"
 clap = { version = "3.1.18", features = ["cargo", "derive", "unicode"] }
-globset = "0.4.8"
+globset = "0.4.9"
 is_executable = "1.0.1"
 multipart = { version = "0.18.0", default-features = false, features = ["client"] }
 regex = "1.5.6"
