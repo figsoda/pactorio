@@ -409,7 +409,6 @@ dependencies = [
  "multipart",
  "regex",
  "rpassword",
- "rprompt",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -571,12 +570,6 @@ dependencies = [
  "serde_json",
  "winapi",
 ]
-
-[[package]]
-name = "rprompt"
-version = "1.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b386f4748bdae2aefc96857f5fda07647f851d089420e577831e2a14b45230f8"
 
 [[package]]
 name = "rustls"
