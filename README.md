@@ -44,11 +44,11 @@ flag | description
 
 option | description
 -|-
---compression \<method> | Specify the compression method, ignored without `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate
+--compression \<method> | Specify the compression method, ignored without the `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate
 -d, --dir \<directory> | Set working directory
 -i, --input \<file> | Specify the config file to use <br /> default: pactorio.toml
 -o, --output \<directory> | Specify the output directory <br /> default: release
--p, --publish \<credential>... | Publish to mod portal, accepts up to two arguments for username and password
+-p, --publish [\<api-key>] | Upload to mod portal <br /> Requires an API key, which can be created on <https://factorio.com/profile>
 
 
 ## Configuration

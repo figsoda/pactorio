@@ -17,7 +17,7 @@ pub struct Opts {
     #[clap(short, long)]
     pub zip: bool,
 
-    /// Specify the compression method, ignored without `-z/--zip` flag
+    /// Specify the compression method, ignored without the `-z/--zip` flag
     #[clap(
         long,
         value_name = "method",
@@ -39,9 +39,12 @@ pub struct Opts {
     #[clap(short, long, value_name = "directory", default_value = "release")]
     pub output: PathBuf,
 
-    /// Publish to mod portal, accepts up to two arguments for username and password
-    #[clap(short, long, value_name = "credential", min_values = 0, max_values = 2)]
-    pub publish: Option<Vec<String>>,
+    // https://wiki.factorio.com/Mod_upload_API
+    /// Upload to mod portal
+    ///
+    /// Requires an API key, which can be created on https://factorio.com/profile
+    #[clap(short, long, value_name = "api-key")]
+    pub publish: Option<Option<String>>,
 }
 
 fn compression_method(compression: &str) -> CompressionMethod {

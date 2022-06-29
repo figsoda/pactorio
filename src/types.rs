@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
 use std::{collections::HashMap, default::Default};
 
@@ -98,36 +99,25 @@ impl From<Config> for Info {
                 let mut xs = Vec::new();
 
                 for (name, version) in deps.required {
-                    xs.push(format!("{} {}", name, version));
+                    xs.push(format!("{name} {version}"));
                 }
 
                 for (name, version) in deps.conflict {
-                    xs.push(format!("! {} {}", name, version));
+                    xs.push(format!("! {name} {version}"));
                 }
 
                 for (name, version) in deps.optional {
-                    xs.push(format!("? {} {}", name, version));
+                    xs.push(format!("? {name} {version}"));
                 }
 
                 for (name, version) in deps.hidden {
-                    xs.push(format!("(?) {} {}", name, version));
+                    xs.push(format!("(?) {name} {version}"));
                 }
 
                 xs
             }),
         }
     }
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct UploadResult {
-    pub changelog: Option<String>,
-    pub filename: String,
-    #[serde(skip_deserializing)]
-    pub file_size: usize,
-    #[serde(rename(serialize = "info_json"))]
-    pub info: String,
-    pub thumbnail: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -140,4 +130,25 @@ pub struct ModRelease {
 pub enum ModQuery {
     Err { message: String },
     Mod { releases: Vec<ModRelease> },
+}
+
+#[derive(Debug, Deserialize, Error)]
+#[error("{error}: {message}")]
+pub struct UploadError {
+    error: String,
+    message: String,
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum InitUploadResult {
+    Err(UploadError),
+    Ok { upload_url: String },
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum FinishUploadResult {
+    Err(UploadError),
+    Ok { success: bool },
 }

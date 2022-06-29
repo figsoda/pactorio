@@ -11,13 +11,11 @@ use crate::{
     types::{Config, Info},
 };
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result};
 use clap::Parser;
 use globset::{Glob, GlobSetBuilder};
 use rpassword::prompt_password;
-use rprompt::prompt_reply_stderr;
 use serde::Serialize;
-use ureq::agent;
 use walkdir::WalkDir;
 
 use std::{
@@ -81,7 +79,7 @@ fn main() -> Result<()> {
     };
 
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
-    if let Some(cred) = opts.publish {
+    if let Some(api_key) = opts.publish {
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, &mut zip, file_name.into(), opts.compression)?;
 
@@ -89,7 +87,7 @@ fn main() -> Result<()> {
             fs::create_dir_all(&opts.output)
                 .with_context(fail::create_dir(opts.output.display()))?;
 
-            let output = &Path::new(&opts.output).join(format!("{}.zip", file_name));
+            let output = &Path::new(&opts.output).join(format!("{file_name}.zip"));
             release::remove_path(output)?;
 
             let mut file =
@@ -101,53 +99,19 @@ fn main() -> Result<()> {
         let mod_name = &cfg.package.name;
         let mod_version = &cfg.package.version;
 
-        if publish::check_mod(mod_name, mod_version)
-            .with_context(fail::query_mod(mod_name, mod_version))?
-        {
-            bail!("{} v{} already exists", mod_name, mod_version);
-        }
-
-        let agent = &agent();
-
-        let csrf_token = publish::get_csrf_token(agent).context("Failed to fetch csrf token")?;
-
-        let mut cred = cred.into_iter();
-        let (username, password) = match cred.next() {
-            Some(username) => (
-                username,
-                match cred.next() {
-                    Some(password) => password,
-                    None => prompt_password("Factorio password: ")
-                        .context("Failed to prompt for password")?,
-                },
-            ),
-            None => (
-                prompt_reply_stderr("Factorio username: ")
-                    .context("Failed to prompt for username")?,
-                prompt_password("Factorio password: ").context("Failed to prompt for password")?,
-            ),
+        let api_key = if let Some(x) = api_key {
+            x
+        } else {
+            prompt_password("API key: ").context("Failed to prompt for api key")?
         };
 
-        publish::login(agent, csrf_token, username, password)
-            .context("Failed to login to Factorio")?;
-
-        let upload_token =
-            publish::get_upload_token(agent, mod_name).context("Failed to fetch upload token")?;
-
-        publish::update_mod(agent, mod_name, upload_token, &zip.into_inner())
+        publish::upload_mod(mod_name, &api_key, &zip.into_inner())
             .with_context(fail::publish(mod_name, mod_version))?;
-
-        if publish::check_mod(mod_name, mod_version)
-            .with_context(fail::query_published(mod_name, mod_version))?
-        {
-            eprintln!("{} v{} published successfully", mod_name, mod_version);
-        } else {
-            bail!("Failed to publish {}", mod_name);
-        }
+        eprintln!("{mod_name} version {mod_version} was uploaded successfully");
     } else if opts.zip {
         fs::create_dir_all(&opts.output).with_context(fail::create_dir(opts.output.display()))?;
 
-        let output = &Path::new(&opts.output).join(format!("{}.zip", file_name));
+        let output = &Path::new(&opts.output).join(format!("{file_name}.zip"));
         release::remove_path(output)?;
 
         let file = File::create(output).with_context(fail::create_file(output.display()))?;

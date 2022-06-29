@@ -11,11 +11,7 @@ fail!(create_dir path = "Failed to create directory {}");
 fail!(create_file path = "Failed to create file {}");
 fail!(parse_cfg path = "Failed to parse configuration file {}");
 fail!(parse_glob pat = "Failed to parse glob pattern {}");
-fail!(publish name ver = "Failed to publish {} v{}");
-fail!(query_mod name ver = "Failed to query mod {} v{}");
-fail!(query_published name ver =
-    "Failed to query mod {} v{}, but it could be published successfully"
-);
+fail!(publish name ver = "Failed to publish {} version {}");
 fail!(read path = "Failed to read file {}");
 fail!(remove_dir path = "Failed to remove directory {}");
 fail!(remove_file path = "Failed to remove file {}");
