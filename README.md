@@ -48,7 +48,7 @@ option | description
 -d, --dir \<directory> | Set working directory
 -i, --input \<file> | Specify the config file to use <br /> default: pactorio.toml
 -o, --output \<directory> | Specify the output directory <br /> default: release
--p, --publish [\<api-key>] | Upload to mod portal <br /> Requires an API key, which can be created on <https://factorio.com/profile>
+-u, --upload [\<api-key>] | Upload to mod portal <br /> Requires an API key, which can be created on <https://factorio.com/profile>
 
 
 ## Configuration

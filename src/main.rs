@@ -2,9 +2,9 @@
 
 mod cli;
 mod fail;
-mod publish;
 mod release;
 mod types;
+mod upload;
 
 use crate::{
     cli::Opts,
@@ -79,7 +79,7 @@ fn main() -> Result<()> {
     };
 
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
-    if let Some(api_key) = opts.publish {
+    if let Some(api_key) = opts.upload {
         let mut zip = Cursor::new(Vec::with_capacity(256));
         release::zip(files, info, &mut zip, file_name.into(), opts.compression)?;
 
@@ -105,8 +105,8 @@ fn main() -> Result<()> {
             prompt_password("API key: ").context("Failed to prompt for api key")?
         };
 
-        publish::upload_mod(mod_name, &api_key, &zip.into_inner())
-            .with_context(fail::publish(mod_name, mod_version))?;
+        upload::upload_mod(mod_name, &api_key, &zip.into_inner())
+            .with_context(fail::upload(mod_name, mod_version))?;
         eprintln!("{mod_name} version {mod_version} was uploaded successfully");
     } else if opts.zip {
         fs::create_dir_all(&opts.output).with_context(fail::create_dir(opts.output.display()))?;

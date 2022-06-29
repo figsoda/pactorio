@@ -44,7 +44,7 @@ pub struct Opts {
     ///
     /// Requires an API key, which can be created on https://factorio.com/profile
     #[clap(short, long, value_name = "api-key")]
-    pub publish: Option<Option<String>>,
+    pub upload: Option<Option<String>>,
 }
 
 fn compression_method(compression: &str) -> CompressionMethod {
