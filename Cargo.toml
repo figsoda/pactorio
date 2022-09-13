@@ -13,7 +13,7 @@ categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
 anyhow = "1.0.64"
-clap = { version = "3.2.20", features = ["cargo", "derive", "unicode"] }
+clap = { version = "3.2.21", features = ["cargo", "derive", "unicode"] }
 globset = "0.4.9"
 is_executable = "1.0.1"
 multipart = { version = "0.18.0", default-features = false, features = ["client"] }
@@ -33,7 +33,7 @@ default-features = false
 features = ["bzip2", "deflate"]
 
 [build-dependencies]
-clap = { version = "3.2.20", features = ["derive"] }
+clap = { version = "3.2.21", features = ["derive"] }
 clap_complete = "3.2.5"
 
 [build-dependencies.zip]
