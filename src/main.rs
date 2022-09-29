@@ -81,7 +81,13 @@ fn main() -> Result<()> {
     let file_name = &format!("{}_{}", cfg.package.name, cfg.package.version);
     if let Some(api_key) = opts.upload {
         let mut zip = Cursor::new(Vec::with_capacity(256));
-        release::zip(files, info, &mut zip, file_name.into(), opts.compression)?;
+        release::zip(
+            files,
+            info,
+            &mut zip,
+            file_name.into(),
+            opts.compression.into(),
+        )?;
 
         if opts.zip {
             fs::create_dir_all(&opts.output)
@@ -115,7 +121,7 @@ fn main() -> Result<()> {
         release::remove_path(output)?;
 
         let file = File::create(output).with_context(fail::create_file(output.display()))?;
-        release::zip(files, info, file, file_name.into(), opts.compression)?;
+        release::zip(files, info, file, file_name.into(), opts.compression.into())?;
     } else {
         let output = &Path::new(&opts.output).join(file_name);
 
