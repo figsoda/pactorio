@@ -1,4 +1,4 @@
-use clap::{builder::PossibleValue, Parser, ValueEnum};
+use clap::{Parser, ValueEnum};
 
 use std::path::PathBuf;
 
@@ -40,7 +40,7 @@ pub struct Opts {
     pub upload: Option<Option<String>>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, ValueEnum)]
 pub enum CompressionMethod {
     Stored,
     Bzip2,
@@ -56,20 +56,5 @@ impl From<CompressionMethod> for zip::CompressionMethod {
             CompressionMethod::Deflated => Self::Deflated,
             CompressionMethod::Zstd => Self::Zstd,
         }
-    }
-}
-
-impl ValueEnum for CompressionMethod {
-    fn value_variants<'a>() -> &'a [Self] {
-        &[Self::Stored, Self::Bzip2, Self::Deflated, Self::Zstd]
-    }
-
-    fn to_possible_value(&self) -> Option<PossibleValue> {
-        Some(PossibleValue::new(match self {
-            Self::Stored => "stored",
-            Self::Bzip2 => "bz2",
-            Self::Deflated => "deflate",
-            Self::Zstd => "zstd",
-        }))
     }
 }

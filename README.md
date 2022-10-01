@@ -39,7 +39,7 @@ option | description
 -|-
 -c, --compact | Output info.json compactly
 -z, --zip | Output a zip file instead
---compression \<method> | Specify the compression method, ignored without the `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate, zstd
+--compression \<method> | Specify the compression method, ignored without the `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bzip2, deflate, zstd
 -d, --dir \<directory> | Set working directory
 -i, --input \<file> | Specify the config file to use <br /> default: pactorio.toml
 -o, --output \<directory> | Specify the output directory <br /> default: release
