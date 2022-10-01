@@ -60,8 +60,8 @@ jobs:
           file: target/${{ matrix.target }}/release/pactorio${{ matrix.ext }}
           asset_name: pactorio-${{ matrix.target }}${{ matrix.ext }}
 
-  completions:
-    name: completions
+  artifacts:
+    name: artifacts
     needs: create_release
     runs-on: ubuntu-latest
 
@@ -74,19 +74,17 @@ jobs:
           rustup toolchain install nightly --profile minimal
           cargo +nightly build
         env:
-          GEN_COMPLETIONS: 1
+          GEN_ARTIFACTS: artifacts
 
-      - name: Find generated completions
+      - name: Rename generated artifacts
         run: |
-          outputs=(target/debug/build/pactorio-*/out/completions)
-          cp -r "${outputs[0]}" completions
-          mv completions/{_,}pactorio.ps1
-          mv completions/{_pactorio,pactorio.zsh}
+          mv artifacts/{_,}pactorio.ps1
+          mv artifacts/{_pactorio,pactorio.zsh}
 
-      - name: Upload completions
+      - name: Upload artifacts
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ github.token }}
           tag: ${{ github.ref }}
-          file: completions/*
+          file: artifacts/*
           file_glob: true
