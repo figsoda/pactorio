@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.6.0 - 2022-10-01
+
+### Changes
+- Switch to the new public api, which uses an api key instead of previously username and password
+- Rename `bz2` to `bzip2` in `--compression`
+
+### Features
+- Man page
+- Add zstd compression method
+
+
 ## v0.5.2 - 2021-11-10
 
 ### Fixes
