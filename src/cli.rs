@@ -45,6 +45,7 @@ pub enum CompressionMethod {
     Stored,
     Bzip2,
     Deflated,
+    Zstd,
 }
 
 impl From<CompressionMethod> for zip::CompressionMethod {
@@ -53,13 +54,14 @@ impl From<CompressionMethod> for zip::CompressionMethod {
             CompressionMethod::Stored => Self::Stored,
             CompressionMethod::Bzip2 => Self::Bzip2,
             CompressionMethod::Deflated => Self::Deflated,
+            CompressionMethod::Zstd => Self::Zstd,
         }
     }
 }
 
 impl ValueEnum for CompressionMethod {
     fn value_variants<'a>() -> &'a [Self] {
-        &[Self::Stored, Self::Bzip2, Self::Deflated]
+        &[Self::Stored, Self::Bzip2, Self::Deflated, Self::Zstd]
     }
 
     fn to_possible_value(&self) -> Option<PossibleValue> {
@@ -67,6 +69,7 @@ impl ValueEnum for CompressionMethod {
             Self::Stored => "stored",
             Self::Bzip2 => "bz2",
             Self::Deflated => "deflate",
+            Self::Zstd => "zstd",
         }))
     }
 }

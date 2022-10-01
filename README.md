@@ -35,20 +35,17 @@ cargo build --release
 pactorio [FLAGS] [OPTIONS]
 ```
 
-flag | description
--|-
--c, --compact | Output info.json compactly
--h, --help | Prints help information
--V, --version | Prints version information
--z, --zip | Output a zip file instead
-
 option | description
 -|-
---compression \<method> | Specify the compression method, ignored without the `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate
+-c, --compact | Output info.json compactly
+-z, --zip | Output a zip file instead
+--compression \<method> | Specify the compression method, ignored without the `-z/--zip` flag <br /> default: stored <br /> possible values: stored, bz2, deflate, zstd
 -d, --dir \<directory> | Set working directory
 -i, --input \<file> | Specify the config file to use <br /> default: pactorio.toml
 -o, --output \<directory> | Specify the output directory <br /> default: release
 -u, --upload [\<api-key>] | Upload to mod portal <br /> Requires an API key, which can be created on <https://factorio.com/profile>
+-h, --help | Prints help information (use `-h` for a summary)
+-V, --version | Prints version information
 
 
 ## Configuration

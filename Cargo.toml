@@ -30,7 +30,7 @@ walkdir = "2.3.2"
 [dependencies.zip]
 version = "0.6.2"
 default-features = false
-features = ["bzip2", "deflate"]
+features = ["bzip2", "deflate", "zstd"]
 
 [build-dependencies]
 clap = { version = "4.0.8", features = ["derive"] }
@@ -40,7 +40,7 @@ clap_mangen = "0.2.2"
 [build-dependencies.zip]
 version = "0.6.2"
 default-features = false
-features = ["bzip2", "deflate"]
+features = ["bzip2", "deflate", "zstd"]
 
 [profile.release]
 lto = true
