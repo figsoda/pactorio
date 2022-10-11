@@ -392,11 +392,9 @@ dependencies = [
  "globset",
  "is_executable",
  "multipart",
- "regex",
  "rpassword",
  "serde",
  "serde_json",
- "serde_urlencoded",
  "thiserror",
  "toml",
  "ureq",
@@ -623,18 +621,6 @@ version = "1.0.86"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "41feea4228a6f1cd09ec7a3593a682276702cd67b5273544757dae23c096f074"
 dependencies = [
- "itoa",
- "ryu",
- "serde",
-]
-
-[[package]]
-name = "serde_urlencoded"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d3491c14715ca2294c4d6a88f15e84739788c1d030eed8c110436aafdaa2f3fd"
-dependencies = [
- "form_urlencoded",
  "itoa",
  "ryu",
  "serde",
