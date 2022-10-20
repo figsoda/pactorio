@@ -6,7 +6,7 @@ macro_rules! fail {
     };
 }
 
-fail!(copy_file from to = "Faild to copy file {} to {}");
+fail!(copy_file from to = "Failed to copy file {} to {}");
 fail!(create_dir path = "Failed to create directory {}");
 fail!(create_file path = "Failed to create file {}");
 fail!(parse_cfg path = "Failed to parse configuration file {}");
