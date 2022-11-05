@@ -16,7 +16,6 @@ anyhow = "1.0.66"
 clap = { version = "4.0.19", features = ["cargo", "derive", "unicode"] }
 globset = "0.4.9"
 is_executable = "1.0.1"
-multipart = { version = "0.18.0", default-features = false, features = ["client"] }
 rpassword = "7.1.0"
 serde = { version = "1.0.147", features = ["derive"] }
 serde_json = "1.0.87"
@@ -25,6 +24,11 @@ toml = "0.5.9"
 ureq = { version = "2.5.0", features = ["json"] }
 walkdir = "2.3.2"
 zstd = "*"
+
+[dependencies.multipart]
+version = "0.18.0"
+default-features = false
+features = ["client"]
 
 [dependencies.zip]
 version = "0.6.3"
