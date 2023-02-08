@@ -20,7 +20,7 @@ rpassword = "7.2.0"
 serde = { version = "1.0.152", features = ["derive"] }
 serde_json = "1.0.92"
 thiserror = "1.0.38"
-toml = "0.7.1"
+toml = "0.7.2"
 ureq = { version = "2.6.2", features = ["json"] }
 walkdir = "2.3.2"
 zstd = "*"
