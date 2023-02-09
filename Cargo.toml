@@ -18,7 +18,7 @@ globset = "0.4.10"
 is_executable = "1.0.1"
 rpassword = "7.2.0"
 serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.92"
+serde_json = "1.0.93"
 thiserror = "1.0.38"
 toml = "0.7.2"
 ureq = { version = "2.6.2", features = ["json"] }
