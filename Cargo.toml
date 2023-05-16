@@ -31,7 +31,7 @@ default-features = false
 features = ["client"]
 
 [dependencies.zip]
-version = "0.6.5"
+version = "0.6.6"
 default-features = false
 features = ["bzip2", "deflate", "zstd"]
 
@@ -41,7 +41,7 @@ clap_complete = "4.2.3"
 clap_mangen = "0.2.10"
 
 [build-dependencies.zip]
-version = "0.6.5"
+version = "0.6.6"
 default-features = false
 features = ["bzip2", "deflate", "zstd"]
 
