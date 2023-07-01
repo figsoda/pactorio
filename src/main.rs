@@ -6,9 +6,11 @@ mod release;
 mod types;
 mod upload;
 
-use crate::{
-    cli::Opts,
-    types::{Config, Info},
+use std::{
+    env::set_current_dir,
+    fs::{self, File},
+    io::Cursor,
+    path::Path,
 };
 
 use anyhow::{Context, Result};
@@ -18,11 +20,9 @@ use rpassword::prompt_password;
 use serde::Serialize;
 use walkdir::WalkDir;
 
-use std::{
-    env::set_current_dir,
-    fs::{self, File},
-    io::Cursor,
-    path::Path,
+use crate::{
+    cli::Opts,
+    types::{Config, Info},
 };
 
 fn main() -> Result<()> {

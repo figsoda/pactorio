@@ -1,7 +1,7 @@
+use std::{collections::HashMap, default::Default};
+
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-
-use std::{collections::HashMap, default::Default};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Deps {

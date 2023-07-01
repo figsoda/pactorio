@@ -1,10 +1,10 @@
-use crate::types::{FinishUploadResult, InitUploadResult};
+use std::{error::Error, fmt::Write};
 
 use anyhow::{anyhow, bail, Result};
 use multipart::client::lazy::Multipart;
 use ureq::Transport;
 
-use std::{error::Error, fmt::Write};
+use crate::types::{FinishUploadResult, InitUploadResult};
 
 fn transport_error(api_name: &str, e: Transport) -> Result<()> {
     let mut msg = format!("{api_name}: {}", e.kind());

@@ -1,14 +1,14 @@
-use anyhow::{anyhow, Context, Result};
-use is_executable::IsExecutable;
-use zip::{write::FileOptions, CompressionMethod, ZipWriter};
-
-use crate::fail;
-
 use std::{
     fs::{self, File},
     io::{self, Seek, Write},
     path::{Path, PathBuf},
 };
+
+use anyhow::{anyhow, Context, Result};
+use is_executable::IsExecutable;
+use zip::{write::FileOptions, CompressionMethod, ZipWriter};
+
+use crate::fail;
 
 pub fn remove_path(path: &Path) -> Result<()> {
     if path.is_dir() {

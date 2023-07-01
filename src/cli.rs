@@ -1,6 +1,6 @@
-use clap::{Parser, ValueEnum};
-
 use std::path::PathBuf;
+
+use clap::{Parser, ValueEnum};
 
 /// Mod packager for Factorio
 ///
