@@ -13,7 +13,7 @@ categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
 anyhow = "1.0.75"
-clap = { version = "4.4.1", features = ["cargo", "derive", "unicode"] }
+clap = { version = "4.4.2", features = ["cargo", "derive", "unicode"] }
 globset = "0.4.13"
 is_executable = "1.0.1"
 rpassword = "7.2.0"
@@ -36,7 +36,7 @@ default-features = false
 features = ["bzip2", "deflate", "zstd"]
 
 [build-dependencies]
-clap = { version = "4.4.1", features = ["derive"] }
+clap = { version = "4.4.2", features = ["derive"] }
 clap_complete = "4.4.0"
 clap_mangen = "0.2.13"
 
