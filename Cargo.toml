@@ -17,7 +17,7 @@ clap = { version = "4.4.6", features = ["cargo", "derive", "unicode"] }
 globset = "0.4.13"
 is_executable = "1.0.1"
 rpassword = "7.2.0"
-serde = { version = "1.0.188", features = ["derive"] }
+serde = { version = "1.0.189", features = ["derive"] }
 serde_json = "1.0.107"
 thiserror = "1.0.49"
 toml = "0.8.2"
