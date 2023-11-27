@@ -14,7 +14,7 @@ categories = ["command-line-utilities", "development-tools"]
 [dependencies]
 anyhow = "1.0.75"
 clap = { version = "4.4.8", features = ["cargo", "derive", "unicode"] }
-globset = "0.4.13"
+globset = "0.4.14"
 is_executable = "1.0.1"
 rpassword = "7.3.1"
 serde = { version = "1.0.193", features = ["derive"] }
